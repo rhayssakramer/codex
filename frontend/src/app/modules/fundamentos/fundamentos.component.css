@@ -1,0 +1,156 @@
+.area-container {
+  animation: fadeIn 0.3s ease-in;
+}
+
+.disciplinas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.card-disciplina {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-disciplina:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(115, 43, 245, 0.3);
+}
+
+.card-disciplina h3 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.card-disciplina p {
+  margin: 0 0 1rem 0;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.progress-bar {
+  background: #e0e0e0;
+  height: 8px;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: #732BF5;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  display: block;
+  font-size: 0.85rem;
+  color: #999;
+  margin-bottom: 1rem;
+}
+
+.btn-estudar {
+  width: 100%;
+  padding: 0.75rem;
+  background: #732BF5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-estudar:hover {
+  background: #5a1fb8;
+  transform: scale(1.02);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsividade */
+
+/* Telas pequenas (mobile) */
+@media (max-width: 480px) {
+  .disciplinas-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .card-disciplina {
+    padding: 1rem;
+  }
+
+  .card-disciplina h3 {
+    font-size: 1rem;
+  }
+
+  .card-disciplina p {
+    font-size: 0.9rem;
+  }
+
+  .btn-estudar {
+    padding: 0.65rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+  .disciplinas-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .card-disciplina {
+    padding: 1.25rem;
+  }
+
+  .card-disciplina h3 {
+    font-size: 1.1rem;
+  }
+
+  .btn-estudar {
+    padding: 0.7rem;
+  }
+}
+
+/* Desktops pequenos */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .disciplinas-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+    padding: 0 1.5rem;
+  }
+}
+
+/* Desktops grandes */
+@media (min-width: 1025px) {
+  .disciplinas-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding: 0 2rem;
+  }
+}

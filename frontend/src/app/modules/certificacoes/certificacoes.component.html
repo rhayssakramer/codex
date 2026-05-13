@@ -1,0 +1,18 @@
+<div class="area-container">
+  <div *ngIf="!visualizandoDisciplina">
+    <div class="disciplinas-grid">
+      <div *ngFor="let cert of certificacoes" class="card-disciplina" (click)="entrarDisciplina(cert.id)">
+        <h3>{{ cert.nome }}</h3>
+        <p>{{ cert.descricao }}</p>
+        
+        <div class="progress-bar">
+          <div class="progress" [style.width.%]="cert.progresso"></div>
+        </div>
+        <span class="progress-text">{{ cert.progresso }}% concluído</span>
+        
+        <button class="btn-estudar">Entrar</button>
+      </div>
+    </div>
+  </div>
+  <router-outlet></router-outlet>
+</div>
