@@ -1,0 +1,21 @@
+<div class="dashboard-home-container">
+  <div class="welcome-section">
+    <h1>Bem-vindo, {{ user?.name || 'Usuário' }}!</h1>
+    <p class="subtitle">Escolha uma área de estudo para começar</p>
+  </div>
+
+  <div class="areas-grid">
+    <div 
+      *ngFor="let area of areas" 
+      class="area-card"
+      (click)="navigateTo(area.route)"
+      [style.--accent-color]="area.color"
+    >
+      <h3>{{ area.name }}</h3>
+      <p>{{ area.description }}</p>
+      <svg class="card-arrow" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="8,4 20,12 8,20"/>
+      </svg>
+    </div>
+  </div>
+</div>

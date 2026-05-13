@@ -1,0 +1,178 @@
+.dashboard-home-container {
+  padding: 40px 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.welcome-section {
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+.welcome-section h1 {
+  color: #333;
+  font-size: 2.5rem;
+  margin: 0 0 10px 0;
+  font-weight: 700;
+}
+
+.welcome-section .subtitle {
+  color: #666;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.areas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.area-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #f0f0f0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  min-height: 220px;
+}
+
+.area-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: var(--accent-color);
+}
+
+.area-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(115, 43, 245, 0.15);
+  border-color: var(--accent-color);
+}
+
+.area-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.area-card h3 {
+  color: #333;
+  font-size: 1.4rem;
+  margin: 0 0 10px 0;
+  font-weight: 600;
+}
+
+.area-card p {
+  color: #666;
+  font-size: 0.95rem;
+  margin: 0 0 15px 0;
+  line-height: 1.5;
+}
+
+.card-arrow {
+  width: 28px;
+  height: 28px;
+  color: var(--accent-color);
+  transition: transform 0.4s ease;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.area-card:hover .card-arrow {
+  transform: rotate(90deg);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .dashboard-home-container {
+    padding: 24px 16px;
+  }
+
+  .welcome-section {
+    margin-bottom: 32px;
+  }
+
+  .welcome-section h1 {
+    font-size: 1.8rem;
+  }
+
+  .welcome-section .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .areas-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .area-card {
+    padding: 20px 15px;
+  }
+
+  .area-icon {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+  }
+
+  .area-card h3 {
+    font-size: 1.2rem;
+  }
+}
+
+/* Tablet */
+@media (min-width: 481px) and (max-width: 768px) {
+  .dashboard-home-container {
+    padding: 32px 24px;
+  }
+
+  .welcome-section {
+    margin-bottom: 40px;
+  }
+
+  .welcome-section h1 {
+    font-size: 2.1rem;
+  }
+
+  .areas-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Desktop Small */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dashboard-home-container {
+    padding: 40px 30px;
+  }
+
+  .areas-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Desktop Large */
+@media (min-width: 1025px) {
+  .dashboard-home-container {
+    padding: 50px 40px;
+  }
+
+  .welcome-section h1 {
+    font-size: 2.8rem;
+  }
+
+  .areas-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 28px;
+  }
+}

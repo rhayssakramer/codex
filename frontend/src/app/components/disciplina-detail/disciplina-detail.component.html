@@ -1,0 +1,89 @@
+<div class="detail-container">
+  <router-outlet></router-outlet>
+  
+  <div *ngIf="!visualizandoTopico">
+    <nav class="breadcrumb" *ngIf="area && disciplina">
+      <a href="javascript:void(0)" (click)="voltarArea()">{{ area | uppercase }}</a>
+      <span class="separator">/</span>
+      <span class="current">{{ disciplina.nome }}</span>
+    </nav>
+
+    <div *ngIf="disciplina" class="detail-content">
+    <!-- Seção Superior com Título e Busca -->
+    <div class="detail-top-section">
+      <div class="title-section">
+        <h1>{{ disciplina.nome }}</h1>
+        <p class="descricao">{{ disciplina.descricao }}</p>
+      </div>
+      
+      <div class="search-section">
+        <input 
+          type="text" 
+          [(ngModel)]="searchTopico" 
+          placeholder="🔍 Buscar tópico..."
+          class="search-input"
+        >
+      </div>
+    </div>
+
+    <!-- Progresso -->
+    <div class="progress-section">
+      <div class="progress-header">
+        <span>Progresso da Disciplina</span>
+        <span class="progress-percent">{{ disciplina.progresso }}%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" [style.width.%]="disciplina.progresso"></div>
+      </div>
+    </div>
+
+    <!-- Tópicos -->
+    <div class="topicos-section">
+      <h2>Tópicos da Disciplina</h2>
+      <div class="topicos-list">
+        <div 
+          *ngFor="let topico of getFilteredTopicos()" 
+          class="topico-item"
+          [class.concluido]="topico.concluido"
+        >
+          <div class="topico-header">
+            <div class="topico-checkbox">
+              <input 
+                type="checkbox" 
+                [checked]="topico.concluido"
+                (change)="toggleTopico(topico)"
+              >
+            </div>
+            <div class="topico-info" (click)="abrirTopico(topico.nome)">
+              <h3>{{ topico.nome }}</h3>
+              <p>{{ topico.descricao }}</p>
+            </div>
+            <div class="topico-duracao">{{ formatarDuracao(topico.durationMinutos) }}</div>
+            <svg class="topico-arrow-icon" (click)="abrirTopico(topico.nome)" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" title="Abrir conteúdo">
+              <polygon points="8,4 20,12 8,20"/>
+            </svg>
+          </div>
+          <div class="topico-status" *ngIf="topico.concluido">
+            ✓ Concluído
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn-continuar" *ngIf="!todosConcluidoS()">
+        Continuar Aprendizado
+      </button>
+      <button class="btn-concluido" *ngIf="todosConcluidoS()">
+        ✓ Disciplina Concluída!
+      </button>
+      <button class="btn-voltar-secondary" (click)="voltar()">Voltar para Disciplinas</button>
+    </div>
+  </div>
+
+  <div *ngIf="!disciplina" class="not-found">
+    <p>Disciplina não encontrada</p>
+    <button class="btn-voltar" (click)="voltar()">Voltar</button>
+  </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<nav class="breadcrumb" *ngIf="area && content">
+  <a href="javascript:void(0)" (click)="voltar()">{{ area | uppercase }} / {{ content.disciplina }}</a>
+  <span class="separator">/</span>
+  <span class="current">{{ content.topico }}</span>
+</nav>
+
+<div *ngIf="content" class="content-wrapper">
+    <div class="content-meta">
+      <span class="badge badge-area">{{ content.area }}</span>
+      <span class="badge badge-disciplina">{{ content.disciplina }}</span>
+      <span class="badge badge-topico">{{ content.topico }}</span>
+      <span class="meta-date">{{ content.dataCriacao | date: 'dd/MM/yyyy' }}</span>
+    </div>
+
+    <div class="content-body">
+      <div [innerHTML]="parseContent(content.conteudo)" class="markdown-content"></div>
+    </div>
+
+    <div class="content-footer">
+      <button class="btn-voltar-secondary" (click)="voltar()">Voltar para Disciplina</button>
+    </div>
