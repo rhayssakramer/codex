@@ -1,0 +1,13 @@
+backend/CodexAPI/Documentation/AMBIENTES.md
+backend/CodexAPI/Documentation/CHECKLIST.md
+backend/CodexAPI/Documentation/ESTRUTURA.md
+backend/CodexAPI/Documentation/INDICE.md
+backend/CodexAPI/Documentation/INICIO.txt
+backend/CodexAPI/Documentation/MIGRATIONS.md
+backend/CodexAPI/Documentation/QUICKSTART.md
+backend/CodexAPI/Documentation/RESUME.md
+backend/CodexAPI/Documentation/SUMARIO.md
+backend/CodexAPI/Documentation/VISUAL.txt
+backend/CodexAPI/scripts/setup.sh
+backend/CodexAPI/scripts/setup.bat
+backend/.env.example

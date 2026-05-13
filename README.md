@@ -1,2 +1,2 @@
-# codex
-Sistema de estudos de Programação
+# CODEX
+Biblioteca de Conteúdo de Programação

@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "CodexAPI/CodexAPI.csproj",
+      "use": "@vercel/dotnet"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "CodexAPI/Program.cs"
+    }
+  ],
+  "env": {
+    "DOTNET_ROOT": "/usr/local/bin/dotnet-9.0.0"
+  }
+}

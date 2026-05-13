@@ -1,0 +1,55 @@
+# Ambiente
+.env
+.env.*.local
+
+# Build
+bin/
+obj/
+*.o
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Visual Studio
+.vs/
+.vscode/
+*.sln.DotSettings.user
+*.user
+*.suo
+*.sln
+.VisualStudio.SourceTree.Settings.xml
+
+# Rider
+.idea/
+*.sln.iml
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+codex.db
+codex_develop.db
+codex_homolog.db
+
+# Logs
+Logs/
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+packages/
+
+# Testing
+.coverage
+TestResults/
+
+# Build artifacts
+dist/
+build/
+*.nupkg

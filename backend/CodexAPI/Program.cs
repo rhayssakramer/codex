@@ -1,0 +1,241 @@
+using CodexAPI.Data;
+using CodexAPI.Services;
+using CodexAPI.Middleware;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Adicionar services ao container
+builder.Services.AddControllers();
+
+// Swagger/OpenAPI
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Codex API",
+        Version = "v1",
+        Description = "API para gerenciar conteúdo educacional de programação",
+        Contact = new Microsoft.OpenApi.Models.OpenApiContact
+        {
+            Name = "Codex Team"
+        }
+    });
+
+    // Adicionar suporte para JWT no Swagger
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer"
+    });
+
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
+
+// Configurar CORS
+var corsOrigins = builder.Configuration.GetSection("CORS:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", policy =>
+    {
+        policy.WithOrigins(corsOrigins)
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
+
+// Configurar autenticação JWT
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+var secretKey = builder.Configuration["Jwt:SecretKey"];
+
+if (string.IsNullOrEmpty(secretKey))
+{
+    throw new InvalidOperationException("JWT SecretKey não configurada");
+}
+
+var key = Encoding.ASCII.GetBytes(secretKey);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+            {
+                context.Response.Headers.Append("X-Token-Expired", "true");
+            }
+            return Task.CompletedTask;
+        }
+    };
+});
+
+// Configurar banco de dados
+var environment = builder.Environment.EnvironmentName;
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("Connection string não configurada");
+}
+
+if (environment == "Development")
+{
+    builder.Services.AddDbContext<CodexDbContext>(options =>
+        options.UseSqlite(connectionString)
+            .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
+}
+else if (environment == "Homolog" || environment == "Production")
+{
+    // Usar PostgreSQL (Neon)
+    builder.Services.AddDbContext<CodexDbContext>(options =>
+        options.UseNpgsql(connectionString, npgsqlOptions =>
+        {
+            npgsqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 3,
+                maxRetryDelay: TimeSpan.FromMilliseconds(1000),
+                errorCodesToAdd: null);
+        })
+            .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
+}
+
+// Registrar repositories
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IAreaRepository, AreaRepository>();
+builder.Services.AddScoped<IDisciplinaRepository, DisciplinaRepository>();
+builder.Services.AddScoped<ITopicoRepository, TopicoRepository>();
+builder.Services.AddScoped<IProgressoTopicoRepository, ProgressoTopicoRepository>();
+
+// Registrar services
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+// Health Checks
+builder.Services.AddHealthChecks();
+
+// Logging
+builder.Services.AddLogging(config =>
+{
+    config.AddConsole();
+    if (environment == "Development")
+    {
+        config.AddDebug();
+    }
+});
+
+var app = builder.Build();
+
+// Middleware
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Codex API V1");
+        c.RoutePrefix = string.Empty;
+    });
+}
+
+app.UseHttpsRedirection();
+
+// Usar CORS
+app.UseCors("AllowSpecificOrigins");
+
+// Middleware de segurança
+app.UseMiddleware<SecurityHeadersMiddleware>();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
+// Health check endpoint
+app.MapHealthChecks("/health");
+
+// Middleware para tratamento de exceções globais
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+        var exceptionHandlerFeature = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
+
+        if (exceptionHandlerFeature?.Error != null)
+        {
+            logger.LogError(exceptionHandlerFeature.Error, "Unhandled exception occurred");
+        }
+
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.ContentType = "application/json";
+
+        await context.Response.WriteAsJsonAsync(new
+        {
+            sucesso = false,
+            mensagem = "Erro interno do servidor",
+            erros = app.Environment.IsDevelopment() ? new[] { exceptionHandlerFeature?.Error?.Message } : null
+        });
+    });
+});
+
+// Inicializar banco de dados
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<CodexDbContext>();
+        
+        // Aplicar migrations
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation($"Ambiente: {environment}");
+        logger.LogInformation("Aplicando migrations...");
+
+        await context.Database.MigrateAsync();
+
+        logger.LogInformation("Migrations aplicadas com sucesso");
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Erro ao aplicar migrations");
+        throw;
+    }
+}
+
+app.Run();
