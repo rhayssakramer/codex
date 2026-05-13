@@ -1,0 +1,234 @@
+<div class="profile-edit-modal-overlay" (click)="fecharModal()">
+  <div class="profile-edit-modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Editar Perfil</h2>
+      <button class="close-btn" (click)="fecharModal()">✕</button>
+    </div>
+
+    <form (ngSubmit)="salvarPerfil()" class="profile-form">
+      <!-- Seção de Foto de Perfil -->
+      <div class="foto-section">
+        <div class="foto-circle">
+          <img 
+            *ngIf="profileFotoPreview" 
+            [src]="profileFotoPreview" 
+            alt="Foto do perfil"
+          />
+          <span *ngIf="!profileFotoPreview" class="placeholder-text">Foto</span>
+          
+          <button 
+            type="button"
+            class="camera-btn"
+            (click)="fotoInput.click()"
+            title="Alterar foto"
+          >
+            <i class="fas fa-camera"></i>
+          </button>
+        </div>
+
+        <input 
+          type="file" 
+          accept="image/*" 
+          (change)="onFotoSelected($event)" 
+          hidden
+          #fotoInput
+        />
+      </div>
+
+      <!-- Seção de Informações Pessoais -->
+      <div class="form-section">
+        <h3>Informações Pessoais</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profile-name">Nome *</label>
+            <input
+              type="text"
+              id="profile-name"
+              placeholder="Seu nome"
+              [(ngModel)]="profileData.name"
+              name="name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="profile-surname">Sobrenome *</label>
+            <input
+              type="text"
+              id="profile-surname"
+              placeholder="Seu sobrenome"
+              [(ngModel)]="profileData.surname"
+              name="surname"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profile-email">Email *</label>
+            <input
+              type="email"
+              id="profile-email"
+              placeholder="seu@email.com"
+              [(ngModel)]="profileData.email"
+              name="email"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="profile-genero">Gênero</label>
+            <select
+              id="profile-genero"
+              [(ngModel)]="profileData.genero"
+              name="genero"
+            >
+              <option value="">Selecione o gênero</option>
+              <option value="homem-cis">Homem cis</option>
+              <option value="mulher-cis">Mulher cis</option>
+              <option value="homem-trans">Homem trans</option>
+              <option value="mulher-trans">Mulher trans</option>
+              <option value="outro">Outro</option>
+              <option value="prefiro-nao-informar">Prefiro não informar</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profile-cpf">CPF</label>
+            <input
+              type="text"
+              id="profile-cpf"
+              placeholder="000.000.000-00"
+              [(ngModel)]="profileData.cpf"
+              (input)="formatarCPF($event)"
+              name="cpf"
+              maxlength="14"
+            />
+          </div>
+          <div class="form-group">
+            <label for="profile-dataNascimento">Data de Nascimento</label>
+            <input
+              type="date"
+              id="profile-dataNascimento"
+              [(ngModel)]="profileData.dataNascimento"
+              name="dataNascimento"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção de Endereço -->
+      <div class="form-section">
+        <h3>Endereço</h3>
+
+        <div class="form-group">
+          <label for="profile-cep">CEP</label>
+          <div class="cep-input-wrapper">
+            <input
+              type="text"
+              id="profile-cep"
+              placeholder="00000-000"
+              [(ngModel)]="profileData.cep"
+              name="cep"
+              maxlength="9"
+            />
+            <button
+              type="button"
+              class="search-cep-btn"
+              (click)="buscarCEP()"
+              [disabled]="cepLoading"
+            >
+              {{ cepLoading ? '...' : 'Buscar' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profile-rua">Rua</label>
+            <input
+              type="text"
+              id="profile-rua"
+              placeholder="Nome da rua"
+              [(ngModel)]="profileData.rua"
+              name="rua"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="profile-numero">Número</label>
+            <input
+              type="text"
+              id="profile-numero"
+              placeholder="000"
+              [(ngModel)]="profileData.numero"
+              name="numero"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profile-complemento">Complemento</label>
+            <input
+              type="text"
+              id="profile-complemento"
+              placeholder="Apto, sala, etc (opcional)"
+              [(ngModel)]="profileData.complemento"
+              name="complemento"
+            />
+          </div>
+          <div class="form-group">
+            <label for="profile-bairro">Bairro</label>
+            <input
+              type="text"
+              id="profile-bairro"
+              placeholder="Seu bairro"
+              [(ngModel)]="profileData.bairro"
+              name="bairro"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profile-cidade">Cidade</label>
+            <input
+              type="text"
+              id="profile-cidade"
+              placeholder="Sua cidade"
+              [(ngModel)]="profileData.cidade"
+              name="cidade"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="profile-estado">Estado</label>
+            <input
+              type="text"
+              id="profile-estado"
+              placeholder="UF"
+              [(ngModel)]="profileData.estado"
+              name="estado"
+              readonly
+              maxlength="2"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="error" class="error-message">
+        {{ error }}
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="cancel-btn" (click)="fecharModal()">
+          Cancelar
+        </button>
+        <button type="submit" class="save-btn" [disabled]="loading">
+          {{ loading ? 'Salvando...' : 'Salvar Alterações' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
