@@ -180,6 +180,57 @@
   font-size: 1.5rem;
   cursor: pointer;
   color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.toggle-sidebar-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  width: 250px;
+  transition: all 0.3s ease;
+}
+
+.search-bar:focus-within {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.search-bar i {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+}
+
+.search-input {
+  background: none;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 0.95rem;
+  width: 100%;
+  placeholder-shown: rgba(255, 255, 255, 0.6);
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.search-input:focus {
+  color: white;
 }
 
 .header-spacer {

@@ -37,9 +37,20 @@
 
   <div class="main-content">
     <header class="top-header">
-      <button class="toggle-sidebar-btn" (click)="toggleSidebar()">
-        ☰
+      <button class="toggle-sidebar-btn" (click)="toggleSidebar()" title="Recolher/Expandir menu">
+        <i class="fas fa-bars"></i>
       </button>
+
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input 
+          type="text" 
+          placeholder="Buscar..." 
+          class="search-input"
+          [(ngModel)]="searchQuery"
+          (input)="onSearch(searchQuery)"
+        >
+      </div>
 
       <div class="header-spacer"></div>
 

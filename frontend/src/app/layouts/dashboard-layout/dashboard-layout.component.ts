@@ -20,6 +20,7 @@ export class DashboardLayoutComponent implements OnInit {
   notificationsOpen = false;
   unreadNotifications = 0;
   notifications: any[] = [];
+  searchQuery = '';
 
   areas = [
     { id: 'fundamentos', name: 'Fundamentos' },
@@ -71,6 +72,14 @@ export class DashboardLayoutComponent implements OnInit {
     this.notificationsOpen = !this.notificationsOpen;
     if (this.notificationsOpen) {
       this.userMenuOpen = false;
+    }
+  }
+
+  onSearch(query: string): void {
+    this.searchQuery = query;
+    if (query.trim()) {
+      console.log('Buscando por:', query);
+      // TODO: Implementar lógica de busca (buscar conteúdo, cursos, etc)
     }
   }
 
