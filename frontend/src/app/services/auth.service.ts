@@ -15,6 +15,10 @@ export class AuthService {
     const token = localStorage.getItem('auth_token');
     if (token) {
       const user = JSON.parse(localStorage.getItem('user') || '{}');
+      // Garantir que role existe (para o admin user)
+      if (user.email === 'admin@codex.com.br') {
+        user.role = 'admin';
+      }
       this.userSubject.next(user);
     }
   }
@@ -23,12 +27,17 @@ export class AuthService {
     return new Observable(observer => {
       // Simular autenticação
       setTimeout(() => {
-        const user = {
+        const user: any = {
           id: 1,
           email: email,
           name: email.split('@')[0],
           avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`
         };
+
+        // Adicionar role para admin
+        if (email === 'admin@codex.com.br') {
+          user.role = 'admin';
+        }
         
         localStorage.setItem('auth_token', 'fake_token_' + Date.now());
         localStorage.setItem('user', JSON.stringify(user));

@@ -27,6 +27,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   loading = false;
   error = '';
   showPassword = false;
+  showRegisterPassword = false;
+  showRegisterConfirmPassword = false;
   showRegisterModal = false;
   registerEmail = '';
   registerPassword = '';

@@ -13,9 +13,13 @@ import { ProfileEditComponent } from '../../components/profile-edit/profile-edit
 })
 export class DashboardLayoutComponent implements OnInit {
   user: any = null;
+  isAdmin = false;
   sidebarOpen = true;
   userMenuOpen = false;
   showProfileEditModal = false;
+  notificationsOpen = false;
+  unreadNotifications = 0;
+  notifications: any[] = [];
 
   areas = [
     { id: 'fundamentos', name: 'Fundamentos' },
@@ -33,6 +37,7 @@ export class DashboardLayoutComponent implements OnInit {
   ngOnInit(): void {
     this.authService.user$.subscribe(user => {
       this.user = user;
+      this.isAdmin = user?.role === 'admin';
     });
   }
 
@@ -60,6 +65,13 @@ export class DashboardLayoutComponent implements OnInit {
   onProfileSave(updatedProfile: any): void {
     // Atualizar dados do usuário
     this.authService.updateUserProfile(updatedProfile);
+  }
+
+  toggleNotifications(): void {
+    this.notificationsOpen = !this.notificationsOpen;
+    if (this.notificationsOpen) {
+      this.userMenuOpen = false;
+    }
   }
 
   logout(): void {

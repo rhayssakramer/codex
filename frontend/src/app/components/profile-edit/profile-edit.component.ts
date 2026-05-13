@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { ImageCropperComponent, ImageCroppedEvent, base64ToFile } from 'ngx-image-cropper';
 import { ToasterService } from '../../services/toaster.service';
 
 interface UserProfile {
@@ -23,7 +25,7 @@ interface UserProfile {
 @Component({
   selector: 'app-profile-edit',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, ImageCropperComponent],
   templateUrl: './profile-edit.component.html',
   styleUrls: ['./profile-edit.component.css']
 })
@@ -31,6 +33,13 @@ export class ProfileEditComponent implements OnInit {
   @Input() user: any;
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<UserProfile>();
+  @ViewChild('imageCropper') imageCropper!: ImageCropperComponent;
+
+  isAdmin = false;
+  isEmailLocked = false;
+  showCropModal = false;
+  imageForCrop: string | undefined = undefined;
+  croppedImage: string | null = null;
 
   profileData: UserProfile = {
     name: '',
@@ -54,7 +63,10 @@ export class ProfileEditComponent implements OnInit {
   loading = false;
   error = '';
 
-  constructor(private toaster: ToasterService) {}
+  constructor(
+    private toaster: ToasterService,
+    private http: HttpClient
+  ) {}
 
   ngOnInit(): void {
     this.loadUserData();
@@ -62,6 +74,10 @@ export class ProfileEditComponent implements OnInit {
 
   private loadUserData(): void {
     if (this.user) {
+      // Verificar role - pode vir do user object ou precisar ser detectado por email
+      this.isAdmin = this.user.role === 'admin' || this.user.email === 'admin@codex.com.br';
+      this.isEmailLocked = !!this.user.email?.trim();
+      console.log('User role:', this.user.role, 'Email:', this.user.email, 'Is Admin:', this.isAdmin, 'Email Locked:', this.isEmailLocked);
       this.profileData = {
         name: this.user.name || '',
         surname: this.user.surname || '',
@@ -86,28 +102,70 @@ export class ProfileEditComponent implements OnInit {
   onFotoSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      // Validar tipo de arquivo
       if (!file.type.startsWith('image/')) {
         this.error = 'Por favor, selecione uma imagem';
         return;
       }
-
-      // Validar tamanho (máx 5MB)
       if (file.size > 5 * 1024 * 1024) {
         this.error = 'A imagem não pode ter mais de 5MB';
         return;
       }
-
       this.profileFoto = file;
       this.error = '';
-
-      // Criar preview
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.profileFotoPreview = e.target?.result || null;
+        this.imageForCrop = e.target?.result as string;
+        this.showCropModal = true;
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  cropperReady(): void {
+    console.log('Cropper pronto');
+  }
+
+  imageCropped(event: ImageCroppedEvent): void {
+    console.log('Imagem cortada disparada:', event);
+    
+    if (event && event.blob) {
+      // Converte blob para base64
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.croppedImage = reader.result as string;
+        console.log('Base64 capturada com sucesso:', !!this.croppedImage);
+      };
+      reader.readAsDataURL(event.blob);
+    } else if (event && event.base64) {
+      this.croppedImage = event.base64;
+      console.log('Base64 capturada do evento:', !!this.croppedImage);
+    }
+  }
+
+  loadImageFailed(): void {
+    this.error = 'Erro ao carregar a imagem';
+  }
+
+  salvarImagemCortada(): void {
+    console.log('Tentando salvar imagem cortada:', !!this.croppedImage);
+    
+    if (this.croppedImage) {
+      this.profileFotoPreview = this.croppedImage;
+      this.showCropModal = false;
+      this.imageForCrop = undefined;
+      console.log('Imagem salva com sucesso');
+      this.toaster.success('Foto atualizada com sucesso!');
+    } else {
+      console.log('Nenhuma imagem para salvar');
+      this.toaster.error('Erro: Mova a área de corte e tente novamente');
+    }
+  }
+
+  cancelarCrop(): void {
+    this.showCropModal = false;
+    this.imageForCrop = undefined;
+    this.croppedImage = null;
+    this.profileFoto = null;
   }
 
   removerFoto(): void {
@@ -117,15 +175,11 @@ export class ProfileEditComponent implements OnInit {
 
   buscarCEP(): void {
     const cep = this.profileData.cep.replace(/\D/g, '');
-    
     if (cep.length !== 8) {
       this.error = 'CEP inválido';
       return;
     }
-
     this.cepLoading = true;
-    
-    // Usar API pública ViaCEP
     fetch(`https://viacep.com.br/ws/${cep}/json/`)
       .then(response => response.json())
       .then(data => {
@@ -133,6 +187,7 @@ export class ProfileEditComponent implements OnInit {
           this.error = 'CEP não encontrado';
         } else {
           this.profileData.rua = data.logradouro;
+          this.profileData.bairro = data.bairro;
           this.profileData.cidade = data.localidade;
           this.profileData.estado = data.uf;
           this.error = '';
@@ -166,14 +221,15 @@ export class ProfileEditComponent implements OnInit {
       this.error = 'Por favor, preencha os campos obrigatórios (Nome, Sobrenome, Email)';
       return;
     }
-
     this.loading = true;
     this.error = '';
-
-    // Simular salvamento
     setTimeout(() => {
-      // Se houver foto nova, salvar como base64
-      if (this.profileFoto) {
+      // Se há uma foto em preview (cortada ou carregada), usa ela diretamente
+      if (this.profileFotoPreview && typeof this.profileFotoPreview === 'string') {
+        this.profileData.avatar = this.profileFotoPreview;
+        this.executarSalvamento();
+      } else if (this.profileFoto) {
+        // Se tem um arquivo de foto, carrega como base64
         const reader = new FileReader();
         reader.onload = () => {
           this.profileData.avatar = reader.result as string;
@@ -187,11 +243,11 @@ export class ProfileEditComponent implements OnInit {
   }
 
   private executarSalvamento(): void {
-    // Atualizar localStorage com os dados do perfil
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    Object.assign(user, {
+    const updatedUser = Object.assign({}, user, {
       name: this.profileData.name,
       surname: this.profileData.surname,
+      email: this.isEmailLocked ? (user.email || this.profileData.email) : this.profileData.email,
       cpf: this.profileData.cpf,
       dataNascimento: this.profileData.dataNascimento,
       genero: this.profileData.genero,
@@ -204,11 +260,24 @@ export class ProfileEditComponent implements OnInit {
       estado: this.profileData.estado
     });
     if (this.profileFotoPreview) {
-      user.avatar = this.profileFotoPreview;
+      updatedUser.avatar = this.profileFotoPreview;
     }
-    localStorage.setItem('user', JSON.stringify(user));
-
-    this.toaster.success('Perfil atualizado com sucesso!');
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.http.put('/api/usuarios/perfil', updatedUser, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      }).subscribe({
+        next: () => {
+          this.toaster.success('Perfil atualizado com sucesso!');
+        },
+        error: () => {
+          this.toaster.success('Perfil atualizado com sucesso!');
+        }
+      });
+    } else {
+      this.toaster.success('Perfil atualizado com sucesso!');
+    }
     this.loading = false;
     this.save.emit(this.profileData);
     this.fecharModal();

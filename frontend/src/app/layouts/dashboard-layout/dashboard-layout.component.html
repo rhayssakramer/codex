@@ -24,6 +24,7 @@
       <div class="nav-divider"></div>
 
       <button 
+        *ngIf="isAdmin"
         routerLink="/dashboard/admin"
         routerLinkActive="active"
         class="nav-item admin-item"
@@ -42,11 +43,34 @@
 
       <div class="header-spacer"></div>
 
+      <div class="header-actions">
+        <button class="notification-btn" (click)="toggleNotifications()" title="Notificações">
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge" *ngIf="unreadNotifications > 0">{{ unreadNotifications }}</span>
+        </button>
+
+        <div class="notifications-dropdown" *ngIf="notificationsOpen" (click)="$event.stopPropagation()">
+          <div class="notifications-header">
+            <h3>Notificações</h3>
+            <button class="close-btn" (click)="notificationsOpen = false">✕</button>
+          </div>
+          <div class="notifications-list" *ngIf="notifications.length > 0; else noNotifications">
+            <div class="notification-item" *ngFor="let notif of notifications">
+              <p>{{ notif.message }}</p>
+              <span class="notification-time">{{ notif.time }}</span>
+            </div>
+          </div>
+          <ng-template #noNotifications>
+            <div class="empty-notifications">
+              <i class="fas fa-bell-slash"></i>
+              <p>Nenhuma notificação</p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
       <div class="user-section" *ngIf="user" (click)="$event.stopPropagation()">
         <button class="user-menu-button" (click)="toggleUserMenu()">
-          <div class="user-info">
-            <span class="user-name">{{ user.name }} {{ user.surname || '' }}</span>
-          </div>
           <img [src]="user.avatar" [alt]="user.name" class="user-avatar">
         </button>
 
@@ -70,6 +94,10 @@
           <button class="dropdown-item" (click)="userMenuOpen = false">
             <i class="fas fa-chart-line"></i>
             Meu Progresso
+          </button>
+          <button class="dropdown-item" (click)="userMenuOpen = false">
+            <i class="fas fa-award"></i>
+            Certificados
           </button>
 
           <div class="dropdown-divider"></div>

@@ -6,6 +6,43 @@
     </div>
 
     <form (ngSubmit)="salvarPerfil()" class="profile-form">
+      <!-- Modal de Crop de Imagem -->
+      <div *ngIf="showCropModal" class="crop-modal-overlay" (click)="cancelarCrop()">
+        <div class="crop-modal-content" (click)="$event.stopPropagation()">
+          <div class="crop-header">
+            <h3>Cortar Foto</h3>
+            <button type="button" class="close-crop-btn" (click)="cancelarCrop()">✕</button>
+          </div>
+          
+          <div class="crop-container">
+            <p class="crop-info">Mova e redimensione a área de corte para visualizar a imagem</p>
+            <image-cropper
+              #imageCropper
+              [imageBase64]="imageForCrop"
+              [maintainAspectRatio]="true"
+              [aspectRatio]="1"
+              [resizeToWidth]="400"
+              [cropperMinHeight]="100"
+              [cropperMinWidth]="100"
+              format="png"
+              (imageCropped)="imageCropped($event)"
+              (cropperReady)="cropperReady()"
+              (loadImageFailed)="loadImageFailed()"
+            ></image-cropper>
+          </div>
+
+          <div class="crop-preview" *ngIf="croppedImage">
+            <p>Visualização:</p>
+            <img [src]="croppedImage" alt="Preview da foto cortada" />
+          </div>
+
+          <div class="crop-actions">
+            <button type="button" class="btn-cancel" (click)="cancelarCrop()">Cancelar</button>
+            <button type="button" class="btn-save" (click)="salvarImagemCortada()">Usar Foto</button>
+          </div>
+        </div>
+      </div>
+
       <!-- Seção de Foto de Perfil -->
       <div class="foto-section">
         <div class="foto-circle">
@@ -71,7 +108,7 @@
               placeholder="seu@email.com"
               [(ngModel)]="profileData.email"
               name="email"
-              readonly
+              [disabled]="isEmailLocked"
             />
           </div>
           <div class="form-group">

@@ -16,6 +16,11 @@
   overflow: hidden;
 }
 
+.login-image img{
+  width: 60px;
+  margin-bottom: -7px;
+}
+
 .particles {
   position: absolute;
   width: 100%;
@@ -32,6 +37,13 @@
   transform: translate(-50%, -50%);
   z-index: 2;
   text-align: center;
+}
+
+.logo-image {
+  width: 40px;
+  height: auto;
+  margin: 0 auto 1rem auto;
+  display: block;
 }
 
 .image-overlay h1 {
@@ -432,7 +444,7 @@
 .camera-btn {
   position: absolute;
   bottom: -3px;
-  right: 8px;
+  right: 1px;
   width: 35px;
   height: 35px;
   border-radius: 50%;
@@ -449,30 +461,6 @@
 
 .camera-btn:hover {
   transform: scale(1.1);
-}
-
-.remove-foto-btn {
-  position: absolute;
-  top: -2px;
-  right: 3px;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  background: #ff4757;
-  color: white;
-  border: none;
-  font-size: 1.3rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  line-height: 1;
-  padding: 0;
-}
-
-.remove-foto-btn:active {
-  transform: scale(0.9);
 }
 
 .form-row {
@@ -559,6 +547,56 @@
 .register-modal-close:hover {
   color: #732BF5;
   transform: scale(1.1);
+}
+
+.register-modal-header-divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 1rem 0;
+}
+
+.register-modal-form-divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 1rem 0;
+}
+
+.register-modal-divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.register-modal-divider::before,
+.register-modal-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.register-modal-divider span {
+  margin: 0 1rem;
+}
+
+.register-modal-footer {
+  text-align: center;
+  color: #666;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+}
+
+.register-modal-footer a {
+  color: #732BF5;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.register-modal-footer a:hover {
+  color: #5a1fb8;
 }
 
 .register-form {
