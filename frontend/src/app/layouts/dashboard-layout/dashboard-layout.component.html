@@ -1,0 +1,96 @@
+<div class="dashboard-container">
+  <aside class="sidebar" [class.open]="sidebarOpen">
+    <div class="sidebar-header">
+      <a href="#dashboard"><h3>CODEX</h3></a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button 
+        *ngFor="let area of areas"
+        routerLink="/dashboard/{{ area.id }}"
+        routerLinkActive="active"
+        class="nav-item"
+        (click)="sidebarOpen = false">
+        <i [ngSwitch]="area.id" class="nav-icon">
+          <i *ngSwitchCase="'fundamentos'" class="fas fa-book"></i>
+          <i *ngSwitchCase="'frontend'" class="fas fa-palette"></i>
+          <i *ngSwitchCase="'backend'" class="fas fa-server"></i>
+          <i *ngSwitchCase="'devops'" class="fas fa-rocket"></i>
+          <i *ngSwitchCase="'certificacoes'" class="fas fa-medal"></i>
+        </i>
+        <span class="label">{{ area.name }}</span>
+      </button>
+
+      <div class="nav-divider"></div>
+
+      <button 
+        routerLink="/dashboard/admin"
+        routerLinkActive="active"
+        class="nav-item admin-item"
+        (click)="sidebarOpen = false">
+        <i class="fas fa-cog nav-icon"></i>
+        <span class="label">Gerenciar Conteúdo</span>
+      </button>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="top-header">
+      <button class="toggle-sidebar-btn" (click)="toggleSidebar()">
+        ☰
+      </button>
+
+      <div class="header-spacer"></div>
+
+      <div class="user-section" *ngIf="user" (click)="$event.stopPropagation()">
+        <button class="user-menu-button" (click)="toggleUserMenu()">
+          <div class="user-info">
+            <span class="user-name">{{ user.name }} {{ user.surname || '' }}</span>
+          </div>
+          <img [src]="user.avatar" [alt]="user.name" class="user-avatar">
+        </button>
+
+        <div class="user-dropdown" *ngIf="userMenuOpen" (click)="$event.stopPropagation()">
+          <div class="dropdown-header">
+            <img [src]="user.avatar" [alt]="user.name" class="dropdown-avatar">
+            <div class="dropdown-user-info">
+              <p class="dropdown-name">{{ user.name }} {{ user.surname || '' }}</p>
+              <p class="dropdown-email">{{ user.email }}</p>
+            </div>
+          </div>
+
+          <button class="dropdown-item" (click)="openProfileEdit()">
+            <i class="fas fa-user"></i>
+            Perfil
+          </button>
+          <button class="dropdown-item" (click)="userMenuOpen = false">
+            <i class="fas fa-cog"></i>
+            Configurações
+          </button>
+          <button class="dropdown-item" (click)="userMenuOpen = false">
+            <i class="fas fa-chart-line"></i>
+            Meu Progresso
+          </button>
+
+          <div class="dropdown-divider"></div>
+
+          <button class="dropdown-item logout" (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            Sair
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
+
+<app-profile-edit
+  *ngIf="showProfileEditModal"
+  [user]="user"
+  (close)="closeProfileEdit()"
+  (save)="onProfileSave($event)"
+></app-profile-edit>
