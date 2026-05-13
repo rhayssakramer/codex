@@ -1,0 +1,155 @@
+<div class="manager-container">
+  <div class="manager-header">
+    <h2>Painel de Gerenciamento de Conteúdo</h2>
+    <button class="btn-voltar" (click)="voltar()" title="Voltar">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+        <path d="M15,7H10.17V5.414A2,2,0,0,0,6.756,4L.876,9.879a3,3,0,0,0,0,4.242L6.756,20a2,2,0,0,0,3.414-1.414V17H16a6.006,6.006,0,0,1,6,6,1,1,0,0,0,2,0V16A9.01,9.01,0,0,0,15,7Z"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="manager-content">
+    <!-- Lista de Conteúdos -->
+    <div class="contents-list">
+      <div class="list-toolbar">
+        <div class="search-box">
+          <input 
+            type="text" 
+            class="search-input" 
+            placeholder="🔍 Buscar por área, disciplina ou tópico..." 
+            [(ngModel)]="searchFilter"
+          />
+          <span *ngIf="searchFilter" class="search-clear" (click)="searchFilter = ''">✕</span>
+        </div>
+        <button class="btn-novo" (click)="openCreateModal()">
+          + Novo Conteúdo
+        </button>
+      </div>
+
+      <div class="contents-table">
+        <div class="table-header">
+          <div class="col-area">Área</div>
+          <div class="col-disciplina">Disciplina</div>
+          <div class="col-topico">Tópico</div>
+          <div class="col-posicao">Posição</div>
+          <div class="col-actions">Ações</div>
+        </div>
+
+        <div *ngFor="let content of getFilteredContents()" class="table-row">
+          <div class="col-area">{{ content.area }}</div>
+          <div class="col-disciplina">{{ content.disciplina }}</div>
+          <div class="col-topico">{{ content.topico }}</div>
+          <div class="col-posicao">{{ content.posicao }}</div>
+          <div class="col-actions">
+            <button class="btn-view" (click)="viewContent(content)" title="Ver">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="btn-edit" (click)="openEditModal(content)" title="Editar">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn-delete" (click)="openDeleteModal(content)" title="Deletar">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="getFilteredContents().length === 0" class="empty-state">
+          <p>{{ searchFilter.trim() ? 'Nenhum resultado encontrado' : 'Nenhum conteúdo criado ainda' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Visualização -->
+  <div class="view-modal" *ngIf="viewingContent" (click)="closeViewModal()">
+    <div class="view-modal-content" (click)="$event.stopPropagation()">
+      <div class="view-modal-header">
+        <h2>{{ viewingContent.topico }}</h2>
+        <button class="view-modal-close" (click)="closeViewModal()">✕</button>
+      </div>
+
+      <div class="view-modal-meta">
+        <span class="badge badge-area">{{ viewingContent.area }}</span>
+        <span class="badge badge-disciplina">{{ viewingContent.disciplina }}</span>
+        <span class="badge badge-topico">{{ viewingContent.topico }}</span>
+      </div>
+
+      <div [innerHTML]="parseContent(viewingContent.conteudo)" class="markdown-content"></div>
+    </div>
+  </div>
+
+  <!-- Modal de Edição -->
+  <div class="edit-modal" *ngIf="editingContent" (click)="closeEditModal()">
+    <div class="edit-modal-content" (click)="$event.stopPropagation()">
+      <div class="edit-modal-header">
+        <h2>Editar Conteúdo</h2>
+        <button class="edit-modal-close" (click)="closeEditModal()">✕</button>
+      </div>
+
+      <form class="edit-form" (ngSubmit)="saveEditedContent()">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Área *</label>
+            <select [(ngModel)]="editingContent.area" name="area" required>
+              <option *ngFor="let area of areas" [value]="area">{{ area }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Disciplina *</label>
+            <input type="text" [(ngModel)]="editingContent.disciplina" name="disciplina" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tópico *</label>
+            <input type="text" [(ngModel)]="editingContent.topico" name="topico" required>
+          </div>
+
+          <div class="form-group">
+            <label>Posição *</label>
+            <input type="number" [(ngModel)]="editingContent.posicao" name="posicao" min="1" required>
+          </div>
+        </div>
+
+        <div class="form-group full">
+          <label>Conteúdo (Markdown) *</label>
+          <textarea 
+            [(ngModel)]="editingContent.conteudo" 
+            name="conteudo"
+            placeholder="Escreva o conteúdo em Markdown..."
+            rows="8"
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-save">Salvar Alterações</button>
+          <button type="button" class="btn-cancel" (click)="closeEditModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmação de Deleção -->
+  <div class="delete-modal" *ngIf="deletingContent" (click)="closeDeleteModal()">
+    <div class="delete-modal-content" (click)="$event.stopPropagation()">
+      <div class="delete-modal-header">
+        <h2>Confirmar Deleção</h2>
+        <button class="delete-modal-close" (click)="closeDeleteModal()">✕</button>
+      </div>
+
+      <p class="delete-message">
+        Tem certeza que deseja deletar o tópico <strong>{{ deletingContent.topico }}</strong>?
+        <br>
+        <small>Esta ação não pode ser desfeita.</small>
+      </p>
+
+      <div class="delete-actions">
+        <button class="btn-confirm-delete" (click)="confirmDelete()">Deletar</button>
+        <button class="btn-cancel-delete" (click)="closeDeleteModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
