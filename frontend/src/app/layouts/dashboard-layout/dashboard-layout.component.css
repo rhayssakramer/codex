@@ -15,6 +15,32 @@
   position: relative;
 }
 
+.sidebar.closed {
+  width: 80px;
+}
+
+.sidebar.closed .sidebar-nav {
+  align-items: center;
+}
+
+.sidebar.closed .nav-item {
+  justify-content: center;
+  padding: 0.75rem;
+  margin: 0;
+}
+
+.sidebar.closed .label {
+  display: none;
+}
+
+.sidebar.closed .sidebar-header {
+  padding: 1rem 0.5rem;
+}
+
+.sidebar.closed .sidebar-header h3 {
+  font-size: 0.75rem;
+}
+
 .sidebar-header {
   padding: 0rem 1.5rem 1.5rem;
   border-bottom: none;
@@ -180,17 +206,17 @@
   font-size: 1.5rem;
   cursor: pointer;
   color: white;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  margin-left: -30px;
 }
 
 .toggle-sidebar-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
   transform: scale(1.05);
 }
 
@@ -201,7 +227,8 @@
   background: rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   padding: 0.5rem 1rem;
-  width: 250px;
+  width: 350px;
+  height: 40px;
   transition: all 0.3s ease;
 }
 

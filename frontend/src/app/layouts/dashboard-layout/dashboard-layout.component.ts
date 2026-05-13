@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ProfileEditComponent } from '../../components/profile-edit/profile-edit.component';
@@ -7,7 +8,7 @@ import { ProfileEditComponent } from '../../components/profile-edit/profile-edit
 @Component({
   selector: 'app-dashboard-layout',
   standalone: true,
-  imports: [CommonModule, RouterModule, ProfileEditComponent],
+  imports: [CommonModule, FormsModule, RouterModule, ProfileEditComponent],
   templateUrl: './dashboard-layout.component.html',
   styleUrls: ['./dashboard-layout.component.css']
 })
