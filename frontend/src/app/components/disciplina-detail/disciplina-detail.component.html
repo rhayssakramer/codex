@@ -1,7 +1,11 @@
 <div class="detail-container">
-  <router-outlet></router-outlet>
-  
-  <div *ngIf="!visualizandoTopico">
+  <!-- Se houver rota filha (tópico), renderizar apenas o outlet -->
+  <ng-container *ngIf="visualizandoTopico; else disciplinaView">
+    <router-outlet></router-outlet>
+  </ng-container>
+
+  <!-- Senão, renderizar a view da disciplina -->
+  <ng-template #disciplinaView>
     <nav class="breadcrumb" *ngIf="area && disciplina">
       <a href="javascript:void(0)" (click)="voltarArea()">{{ area | uppercase }}</a>
       <span class="separator">/</span>
@@ -85,5 +89,5 @@
     <p>Disciplina não encontrada</p>
     <button class="btn-voltar" (click)="voltar()">Voltar</button>
   </div>
-  </div>
+  </ng-template>
 </div>

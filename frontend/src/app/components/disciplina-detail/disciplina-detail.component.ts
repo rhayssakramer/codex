@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet, NavigationEnd, ActivationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { filter } from 'rxjs/operators';
 
@@ -33,7 +33,17 @@ export class DisciplinaDetailComponent implements OnInit {
   area: string = '';
   disciplinaId: number = 0;
   searchTopico: string = '';
-  visualizandoTopico: boolean = false;
+  
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  get visualizandoTopico(): boolean {
+    // Verificar direto na URL se há "/topico/"
+    return this.router.url.includes('/topico/');
+  }
 
   // Base de dados de disciplinas por área
   disciplinasData: { [key: string]: Disciplina[] } = {
@@ -167,31 +177,19 @@ export class DisciplinaDetailComponent implements OnInit {
     ]
   };
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
-
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.area = this.route.snapshot.data['area'] || 'fundamentos';
       this.disciplinaId = +params['id'];
       this.loadDisciplina();
     });
-    
-    // Monitorar eventos de navegação para detectar quando há rota filha
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      // Verificar se há uma rota filha ativa
-      if (this.route.firstChild) {
-        this.route.firstChild.params.subscribe(p => {
-          this.visualizandoTopico = Object.keys(p).length > 0;
-        });
-      } else {
-        this.visualizandoTopico = false;
-      }
-    });
+  }
+
+  hasActiveChild(): boolean {
+    // Verificar se há uma rota filha ativa (significa que está visualizando um tópico)
+    const hasChild = !!this.route.firstChild;
+    console.log('hasActiveChild:', hasChild);
+    return hasChild;
   }
 
   loadDisciplina(): void {
