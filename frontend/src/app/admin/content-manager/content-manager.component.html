@@ -74,7 +74,114 @@
         <span class="badge badge-topico">{{ viewingContent.topico }}</span>
       </div>
 
-      <div [innerHTML]="parseContent(viewingContent.conteudo)" class="markdown-content"></div>
+      <div [innerHTML]="getSafeHtml(viewingContent.conteudo)" class="markdown-content"></div>
+    </div>
+  </div>
+
+  <!-- Modal de Criação -->
+  <div class="create-modal" *ngIf="showForm && !editingContent" (click)="closeForm()">
+    <div class="create-modal-content" (click)="$event.stopPropagation()">
+      <div class="create-modal-header">
+        <h2>Novo Conteúdo</h2>
+        <button class="create-modal-close" (click)="closeForm()">✕</button>
+      </div>
+
+      <form class="create-form" (ngSubmit)="saveContent()">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Área *</label>
+            <select [(ngModel)]="newContent.area" (change)="selectArea(newContent.area)" name="area" required>
+              <option value="">Selecione uma área</option>
+              <option *ngFor="let area of areas" [value]="area">{{ area }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Disciplina *</label>
+            <select [(ngModel)]="newContent.disciplina" (change)="selectDisciplina(newContent.disciplina)" name="disciplina" required>
+              <option value="">Selecione uma disciplina</option>
+              <option *ngFor="let disc of disciplinasByArea[newContent.area] || []" [value]="disc">{{ disc }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tópico *</label>
+            <input type="text" [(ngModel)]="newContent.topico" name="topico" placeholder="Ex: Introdução a Variáveis" required>
+          </div>
+
+          <div class="form-group">
+            <label>Posição *</label>
+            <input type="number" [(ngModel)]="newContent.posicao" name="posicao" min="1" required>
+          </div>
+        </div>
+
+        <div class="form-group full">
+          <label>Conteúdo (Markdown) *</label>
+          <div class="textarea-toolbar">
+            <label class="btn-upload-image">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+              </svg>
+              {{ uploadingImage ? 'Enviando...' : 'Inserir Imagem' }}
+              <input 
+                type="file" 
+                (change)="onImageSelected($event)" 
+                accept="image/*"
+                [disabled]="uploadingImage"
+                style="display: none;"
+              >
+            </label>
+            <div *ngIf="imagePreview" class="image-preview">
+              <img [src]="imagePreview" alt="Preview">
+            </div>
+          </div>
+          <div class="textarea-wrapper">
+            <button 
+              type="button"
+              class="btn-expand-editor-icon"
+              (click)="toggleExpandedEditor()"
+              title="Expandir editor"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+              </svg>
+            </button>
+            <textarea 
+              [(ngModel)]="newContent.conteudo" 
+              name="conteudo"
+              placeholder="Escreva o conteúdo em Markdown..."
+              rows="10"
+              required
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-save">Criar Conteúdo</button>
+          <button type="button" class="btn-cancel" (click)="closeForm()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Editor Expandido (Fullscreen) -->
+    <div class="expanded-editor-modal" *ngIf="expandedEditor && showForm && !editingContent" (click)="closeExpandedEditor()">
+      <div class="expanded-editor-content" (click)="$event.stopPropagation()">
+        <div class="expanded-editor-header">
+          <h2>Editor de Conteúdo em Tela Cheia</h2>
+          <button class="expanded-editor-close" (click)="closeExpandedEditor()" title="Fechar">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
+            </svg>
+          </button>
+        </div>
+        <textarea 
+          [(ngModel)]="newContent.conteudo" 
+          class="expanded-textarea"
+          placeholder="Escreva o conteúdo em Markdown aqui com muito mais espaço..."
+        ></textarea>
+      </div>
     </div>
   </div>
 
@@ -115,13 +222,43 @@
 
         <div class="form-group full">
           <label>Conteúdo (Markdown) *</label>
-          <textarea 
-            [(ngModel)]="editingContent.conteudo" 
-            name="conteudo"
-            placeholder="Escreva o conteúdo em Markdown..."
-            rows="8"
-            required
-          ></textarea>
+          <div class="textarea-toolbar">
+            <label class="btn-upload-image">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+              </svg>
+              {{ uploadingImage ? 'Enviando...' : 'Inserir Imagem' }}
+              <input 
+                type="file" 
+                (change)="onImageSelectedEdit($event)" 
+                accept="image/*"
+                [disabled]="uploadingImage"
+                style="display: none;"
+              >
+            </label>
+            <div *ngIf="imagePreview" class="image-preview">
+              <img [src]="imagePreview" alt="Preview">
+            </div>
+          </div>
+          <div class="textarea-wrapper">
+            <button 
+              type="button"
+              class="btn-expand-editor-icon"
+              (click)="toggleExpandedEditor()"
+              title="Expandir editor"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+              </svg>
+            </button>
+            <textarea 
+              [(ngModel)]="editingContent.conteudo" 
+              name="conteudo"
+              placeholder="Escreva o conteúdo em Markdown..."
+              rows="8"
+              required
+            ></textarea>
+          </div>
         </div>
 
         <div class="form-actions">
@@ -129,6 +266,64 @@
           <button type="button" class="btn-cancel" (click)="closeEditModal()">Cancelar</button>
         </div>
       </form>
+    </div>
+
+    <!-- Editor Expandido para Edição (Fullscreen) -->
+    <div class="expanded-editor-modal" *ngIf="expandedEditor && editingContent" (click)="closeExpandedEditor()">
+      <div class="expanded-editor-content" (click)="$event.stopPropagation()">
+        <div class="expanded-editor-header">
+          <h2>Editor de Conteúdo em Tela Cheia</h2>
+          <button class="expanded-editor-close" (click)="closeExpandedEditor()" title="Fechar">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
+            </svg>
+          </button>
+        </div>
+        <textarea 
+          [(ngModel)]="editingContent.conteudo" 
+          class="expanded-textarea"
+          placeholder="Escreva o conteúdo em Markdown aqui com muito mais espaço..."
+        ></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Tamanho da Imagem -->
+  <div class="image-size-modal" *ngIf="showImageSizeModal" (click)="closeImageSizeModal()">
+    <div class="image-size-content" (click)="$event.stopPropagation()">
+      <div class="image-size-header">
+        <h2>Escolha o Tamanho da Imagem</h2>
+        <button class="image-size-close" (click)="closeImageSizeModal()">✕</button>
+      </div>
+
+      <div class="image-size-body">
+        <div class="size-preview">
+          <img [src]="imagePreview" [style.width.px]="imageWidth" alt="Preview" class="preview-img" *ngIf="imagePreview">
+        </div>
+
+        <div class="size-controls">
+          <div class="size-input-group">
+            <label>Largura (px):</label>
+            <div class="size-input-row">
+              <input type="range" [(ngModel)]="imageWidth" min="200" max="1200" step="50" class="size-slider">
+              <input type="number" [(ngModel)]="imageWidth" min="200" max="1200" step="50" class="size-input">
+            </div>
+          </div>
+
+          <div class="preset-sizes">
+            <button type="button" (click)="imageWidth = 300" class="preset-btn">300px</button>
+            <button type="button" (click)="imageWidth = 500" class="preset-btn">500px</button>
+            <button type="button" (click)="imageWidth = 700" class="preset-btn">700px</button>
+            <button type="button" (click)="imageWidth = 900" class="preset-btn">900px</button>
+            <button type="button" (click)="imageWidth = 1200" class="preset-btn">1200px</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="image-size-actions">
+        <button (click)="insertImageWithSize()" class="btn-insert">Inserir Imagem</button>
+        <button (click)="closeImageSizeModal()" class="btn-cancel">Cancelar</button>
+      </div>
     </div>
   </div>
 
