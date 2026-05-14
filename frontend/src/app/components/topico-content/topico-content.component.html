@@ -4,18 +4,54 @@
   <span class="current">{{ content.topico }}</span>
 </nav>
 
+<div *ngIf="!content" class="loading-container">
+  <p>Carregando conteúdo...</p>
+</div>
+
 <div *ngIf="content" class="content-wrapper">
-    <div class="content-meta">
-      <span class="badge badge-area">{{ content.area }}</span>
-      <span class="badge badge-disciplina">{{ content.disciplina }}</span>
-      <span class="badge badge-topico">{{ content.topico }}</span>
-      <span class="meta-date">{{ content.dataCriacao | date: 'dd/MM/yyyy' }}</span>
+    <div class="content-header">
+      <div class="header-title-section">
+        <h1 class="content-title">{{ content.topico | titlecase }}</h1>
+        <p class="content-description">{{ content.disciplina }}</p>
+      </div>
+      <div class="download-dropdown" (click)="$event.stopPropagation()">
+        <button class="btn-download-icon" (click)="toggleDownloadMenu()" title="Baixar conteúdo">
+          <i class="fas fa-download"></i>
+        </button>
+        <div class="dropdown-menu" *ngIf="showDownloadMenu">
+          <button class="dropdown-item" (click)="downloadMarkdown()">
+            <i class="fas fa-file-alt"></i> Markdown
+          </button>
+          <button class="dropdown-item" (click)="downloadPDF()">
+            <i class="fas fa-file-pdf"></i> PDF
+          </button>
+        </div>
+      </div>
     </div>
 
-    <div class="content-body">
-      <div [innerHTML]="parseContent(content.conteudo)" class="markdown-content"></div>
+    <!-- Conteúdo do Tópico em Markdown (prioridade) -->
+    <div class="content-body" *ngIf="content.conteudo">
+      <div class="markdown-content" [innerHTML]="getSafeHtml(content.conteudo)"></div>
     </div>
 
-    <div class="content-footer">
-      <button class="btn-voltar-secondary" (click)="voltar()">Voltar para Disciplina</button>
+    <!-- Cards de Subtópicos (se existirem) -->
+    <div class="subtopics-grid" *ngIf="content.subtopicos && content.subtopicos.length > 0">
+      <div class="subtopic-card" *ngFor="let subtopic of content.subtopicos">
+        <div class="card-header">
+          <i class="fa-solid fa-{{ subtopic.icone || 'book' }}"></i>
+          <h3 class="card-title">{{ subtopic.titulo }}</h3>
+        </div>
+        
+        <p class="card-description">{{ subtopic.descricao }}</p>
+        
+        <div class="card-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="subtopic.progresso"></div>
+          </div>
+          <span class="progress-text">{{ subtopic.progresso }}% concluído</span>
+        </div>
+        
+        <button class="btn-entrar">Entrar</button>
+      </div>
     </div>
+</div>
