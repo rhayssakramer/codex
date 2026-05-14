@@ -11,3 +11,5 @@ backend/CodexAPI/Documentation/VISUAL.txt
 backend/CodexAPI/scripts/setup.sh
 backend/CodexAPI/scripts/setup.bat
 backend/.env.example
+backend/CodexAPI/Documentation/RESET_DATABASE.md
+/.vs
