@@ -226,7 +226,10 @@ public class TopicoRepository : ITopicoRepository
 
     public async Task<IEnumerable<Topico>> GetAllAsync()
     {
-        return await _context.Topicos.Where(t => t.Ativo).OrderBy(t => t.Ordem).ToListAsync();
+        return await _context.Topicos
+            .Include(t => t.Disciplina)
+            .OrderBy(t => t.Ordem)
+            .ToListAsync();
     }
 
     public async Task<Topico> AddAsync(Topico topico)

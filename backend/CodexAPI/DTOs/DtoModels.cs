@@ -165,3 +165,15 @@ public class PaginatedResponse<T>
     public int TamanhoPagina { get; set; }
     public int TotalPaginas { get; set; }
 }
+
+// Search DTOs
+public class SearchResultDto
+{
+    public string Id { get; set; } = null!;
+    public string Title { get; set; } = null!;
+    public string? Description { get; set; }
+    public string Type { get; set; } = null!; // "area", "disciplina", "topico"
+    public string? Area { get; set; }
+    public string? DisciplinaId { get; set; }
+    public string Icon { get; set; } = "fa-file";
+}
