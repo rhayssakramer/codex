@@ -1,0 +1,156 @@
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  dockerRegistryServiceConnection: 'codexacr'
+  imageRepository: 'codexapi'
+  containerRegistry: 'codexacr.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/backend/Dockerfile'
+  tag: '$(Build.BuildId)'
+  resourceGroupName: 'codex-rg'
+  containerAppName: 'codex-api'
+  appServiceName: 'codex-web'
+
+stages:
+  - stage: Build
+    displayName: Build Applications
+    jobs:
+      - job: BuildBackend
+        displayName: Build Backend Docker Image
+        steps:
+          - task: Docker@2
+            displayName: Build Docker Image
+            inputs:
+              command: build
+              repository: $(imageRepository)
+              dockerfile: $(dockerfilePath)
+              containerRegistryServiceConnection: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)
+                latest
+              arguments: '--build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')'
+
+      - job: BuildFrontend
+        displayName: Build Frontend Angular App
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '20.x'
+            displayName: 'Install Node.js'
+
+          - script: |
+              cd $(Build.SourcesDirectory)/frontend
+              npm install
+            displayName: 'npm install'
+
+          - script: |
+              cd $(Build.SourcesDirectory)/frontend
+              npm run build -- --configuration production
+            displayName: 'npm build'
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(Build.SourcesDirectory)/frontend/dist'
+              artifactName: 'frontend-dist'
+              publishLocation: 'Container'
+            displayName: 'Publish Frontend Artifacts'
+
+  - stage: Push
+    displayName: Push to Registry
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - job: PushImage
+        displayName: Push Docker Image to ACR
+        steps:
+          - task: Docker@2
+            displayName: Push Image to ACR
+            inputs:
+              command: push
+              repository: $(imageRepository)
+              containerRegistryServiceConnection: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)
+                latest
+
+  - stage: Deploy
+    displayName: Deploy to Azure
+    dependsOn: Push
+    condition: succeeded()
+    jobs:
+      - job: DeployBackend
+        displayName: Deploy Backend to Container App
+        steps:
+          - task: AzureCLI@2
+            displayName: Update Container App with New Image
+            inputs:
+              azureSubscription: 'Azure Subscription' # Você precisa conectar sua subscription
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az containerapp update \
+                  --name $(containerAppName) \
+                  --resource-group $(resourceGroupName) \
+                  --image $(containerRegistry)/$(imageRepository):$(tag)
+
+      - job: DeployFrontend
+        displayName: Deploy Frontend to App Service
+        dependsOn: []
+        steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              artifactName: 'frontend-dist'
+              downloadPath: '$(System.ArtifactsDirectory)'
+
+          - script: |
+              cd $(System.ArtifactsDirectory)/frontend-dist
+              zip -r frontend.zip .
+            displayName: 'Create ZIP for deployment'
+
+          - task: AzureWebApp@1
+            displayName: Deploy to App Service
+            inputs:
+              azureSubscription: 'Azure Subscription' # Você precisa conectar sua subscription
+              appType: 'webAppLinux'
+              appName: $(appServiceName)
+              package: '$(System.ArtifactsDirectory)/frontend-dist'
+              runtimeStack: 'NODE|20-lts'
+
+  - stage: Validate
+    displayName: Validate Deployment
+    dependsOn: Deploy
+    condition: succeeded()
+    jobs:
+      - job: HealthCheck
+        displayName: Check Application Health
+        steps:
+          - task: AzureCLI@2
+            displayName: Get Container App URL
+            inputs:
+              azureSubscription: 'Azure Subscription'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                echo "Getting Container App FQDN..."
+                az containerapp show \
+                  --name $(containerAppName) \
+                  --resource-group $(resourceGroupName) \
+                  --query properties.configuration.ingress.fqdn \
+                  -o tsv
+
+          - task: AzureCLI@2
+            displayName: Check App Service Status
+            inputs:
+              azureSubscription: 'Azure Subscription'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                echo "Checking App Service status..."
+                az webapp show \
+                  --resource-group $(resourceGroupName) \
+                  --name $(appServiceName) \
+                  --query state \
+                  -o tsv
