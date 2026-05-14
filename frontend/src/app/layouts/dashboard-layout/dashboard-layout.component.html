@@ -38,18 +38,41 @@
   <div class="main-content">
     <header class="top-header">
       <button class="toggle-sidebar-btn" (click)="toggleSidebar()" title="Recolher/Expandir menu">
-        <i class="fas fa-bars"></i>
+        <img 
+          [src]="sidebarOpen ? '/assets/sidebar.svg' : '/assets/sidebar-flip.svg'" 
+          alt="Toggle Menu"
+          class="toggle-icon"
+        >
       </button>
 
       <div class="search-bar">
-        <i class="fas fa-search"></i>
         <input 
           type="text" 
-          placeholder="Buscar..." 
+          placeholder="🔍 Buscar por área, disciplina ou tópico..." 
           class="search-input"
           [(ngModel)]="searchQuery"
           (input)="onSearch(searchQuery)"
+          (keydown.enter)="onSearchEnter()"
         >
+        
+        <!-- Dropdown de resultados de busca -->
+        <div class="search-results" *ngIf="showSearchResults && searchResults.length > 0" (click)="$event.stopPropagation()">
+          <div class="search-results-container">
+            <div class="search-result-card" *ngFor="let result of searchResults" (click)="onSearchResultClick(result); $event.stopPropagation()">
+              <div class="card-type-badge" [ngClass]="result.type">{{ result.type }}</div>
+              <div class="card-icon">
+                <i [class]="'fas ' + result.icon"></i>
+              </div>
+              <div class="card-content">
+                <h4 class="card-title">{{ result.title }}</h4>
+                <p class="card-description" *ngIf="result.description">{{ result.description }}</p>
+              </div>
+              <div class="card-arrow">
+                <i class="fas fa-chevron-right"></i>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="header-spacer"></div>
@@ -124,6 +147,24 @@
     <main class="content">
       <router-outlet></router-outlet>
     </main>
+  </div>
+</div>
+
+<!-- Modal de nenhum resultado encontrado -->
+<div class="no-results-modal-overlay" *ngIf="showNoResultsModal" (click)="closeNoResultsModal()">
+  <div class="no-results-modal" (click)="$event.stopPropagation()">
+    <div class="no-results-header">
+      <i class="fas fa-search"></i>
+      <h2>Nenhum Resultado Encontrado</h2>
+    </div>
+    <div class="no-results-body">
+      <p>Desculpe, não encontramos nenhum resultado para:</p>
+      <p class="search-term">"{{ noResultsQuery }}"</p>
+      <p class="suggestion">Tente usar palavras-chave diferentes ou verifique a ortografia</p>
+    </div>
+    <div class="no-results-footer">
+      <button class="btn-close" (click)="closeNoResultsModal()">OK</button>
+    </div>
   </div>
 </div>
 
