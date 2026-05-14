@@ -14,3 +14,4 @@ backend/.env.example
 backend/CodexAPI/Documentation/RESET_DATABASE.md
 /.vs
 backend/.env.render
+backend/CodexAPI/Documentation/RENDER_DEPLOYMENT.md
