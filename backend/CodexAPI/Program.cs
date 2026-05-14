@@ -174,6 +174,18 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Servir arquivos estáticos (imagens, etc)
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        // Adicionar headers CORS para arquivos estáticos
+        ctx.Context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+        ctx.Context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, OPTIONS");
+        ctx.Context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
+    }
+});
+
 // Usar CORS
 app.UseCors("AllowSpecificOrigins");
 
