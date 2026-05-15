@@ -15,3 +15,13 @@ backend/CodexAPI/Documentation/RESET_DATABASE.md
 /.vs
 backend/.env.render
 backend/CodexAPI/Documentation/RENDER_DEPLOYMENT.md
+backend/CodexAPI/Documentation/00-START-HERE.md
+backend/CodexAPI/Documentation/ARCHITECTURE.md
+backend/CodexAPI/Documentation/INDEX.md
+backend/CodexAPI/Documentation/plan.copilotmd
+backend/CodexAPI/Documentation/POST_DEPLOY_CONFIG.md
+backend/CodexAPI/Documentation/progress.copilotmd
+backend/CodexAPI/Documentation/SUMMARY.txt
+AZURE_DEPLOYMENT.txt
+DEVOPS_SETUP.md
+.azure/QUICKSTART.md
