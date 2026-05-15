@@ -5,9 +5,9 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  dockerRegistryServiceConnection: 'codexacr'
+  dockerRegistryServiceConnection: 'codexacr2'
   imageRepository: 'codexapi'
-  containerRegistry: 'codexacr.azurecr.io'
+  containerRegistry: 'codexacr2.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/backend/Dockerfile'
   tag: '$(Build.BuildId)'
   resourceGroupName: 'codex-rg'
@@ -76,48 +76,8 @@ stages:
                 $(tag)
                 latest
 
-  - stage: Deploy
-    displayName: Deploy to Azure
-    dependsOn: Push
-    condition: succeeded()
-    jobs:
-      - job: DeployBackend
-        displayName: Deploy Backend to Container App
-        steps:
-          - task: AzureCLI@2
-            displayName: Update Container App with New Image
-            inputs:
-              azureSubscription: 'Azure Subscription' # Você precisa conectar sua subscription
-              scriptType: 'bash'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                az containerapp update \
-                  --name $(containerAppName) \
-                  --resource-group $(resourceGroupName) \
-                  --image $(containerRegistry)/$(imageRepository):$(tag)
-
-      - job: DeployFrontend
-        displayName: Deploy Frontend to App Service
-        dependsOn: []
-        steps:
-          - task: DownloadBuildArtifacts@0
-            inputs:
-              artifactName: 'frontend-dist'
-              downloadPath: '$(System.ArtifactsDirectory)'
-
-          - script: |
-              cd $(System.ArtifactsDirectory)/frontend-dist
-              zip -r frontend.zip .
-            displayName: 'Create ZIP for deployment'
-
-          - task: AzureWebApp@1
-            displayName: Deploy to App Service
-            inputs:
-              azureSubscription: 'Azure Subscription' # Você precisa conectar sua subscription
-              appType: 'webAppLinux'
-              appName: $(appServiceName)
-              package: '$(System.ArtifactsDirectory)/frontend-dist'
-              runtimeStack: 'NODE|20-lts'
+  # Deploy manual via CLI com autenticação local
+  # Para ativar deploy automático, configure uma Service Connection no Azure DevOps
 
   - stage: Validate
     displayName: Validate Deployment
