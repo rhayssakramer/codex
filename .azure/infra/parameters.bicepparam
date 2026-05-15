@@ -1,3 +1,5 @@
+using './main.bicep'
+
 // Arquivo de parâmetros para deployment
 param location = 'brazilsouth'
 param projectName = 'codex'

@@ -1,5 +1,5 @@
 // Arquivo principal de deployment
-targetScope = 'subscription'
+targetScope = 'resourceGroup'
 
 param location string = 'brazilsouth'
 param projectName string = 'codex'
@@ -9,26 +9,18 @@ param environment string = 'prod'
 param neonConnectionString string
 
 // Variáveis
-var resourceGroupName = '${projectName}-rg'
 var containerAppEnvName = '${projectName}-cae'
 var containerAppName = '${projectName}-api'
 var appServicePlanName = '${projectName}-asp'
 var appServiceName = '${projectName}-web'
-var containerRegistryName = '${projectName}acr'
-var keyVaultName = '${projectName}-kv-${uniqueString(subscription().id)}'
+var containerRegistryName = '${projectName}acr2'
+var keyVaultName = '${projectName}-kv-${uniqueString(resourceGroup().id)}'
 var userAssignedIdentityName = '${projectName}-umi'
 var appInsightsName = '${projectName}-insights'
 var logAnalyticsName = '${projectName}-logs'
 
-// Criar Resource Group
-resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-03-01' = {
-  name: resourceGroupName
-  location: location
-}
-
-// Módulo para criar todos os recursos
+// Módulo para criar todos os recursos (no resource group existente)
 module infrastructure 'modules/infrastructure.bicep' = {
-  scope: resourceGroup
   name: 'infrastructure'
   params: {
     location: location
@@ -47,7 +39,7 @@ module infrastructure 'modules/infrastructure.bicep' = {
   }
 }
 
-output resourceGroupId string = resourceGroup.id
+output resourceGroupName string = resourceGroup().name
 output containerRegistryUrl string = infrastructure.outputs.containerRegistryUrl
 output containerAppUrl string = infrastructure.outputs.containerAppUrl
 output appServiceUrl string = infrastructure.outputs.appServiceUrl
