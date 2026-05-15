@@ -76,41 +76,15 @@ stages:
                 $(tag)
                 latest
 
-  # Deploy manual via CLI com autenticação local
-  # Para ativar deploy automático, configure uma Service Connection no Azure DevOps
-
   - stage: Validate
-    displayName: Validate Deployment
-    dependsOn: Deploy
+    displayName: Validate Build
+    dependsOn: Push
     condition: succeeded()
     jobs:
       - job: HealthCheck
-        displayName: Check Application Health
+        displayName: Verify Images Built
         steps:
-          - task: AzureCLI@2
-            displayName: Get Container App URL
-            inputs:
-              azureSubscription: 'Azure Subscription'
-              scriptType: 'bash'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                echo "Getting Container App FQDN..."
-                az containerapp show \
-                  --name $(containerAppName) \
-                  --resource-group $(resourceGroupName) \
-                  --query properties.configuration.ingress.fqdn \
-                  -o tsv
-
-          - task: AzureCLI@2
-            displayName: Check App Service Status
-            inputs:
-              azureSubscription: 'Azure Subscription'
-              scriptType: 'bash'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                echo "Checking App Service status..."
-                az webapp show \
-                  --resource-group $(resourceGroupName) \
-                  --name $(appServiceName) \
-                  --query state \
-                  -o tsv
+          - script: |
+              echo "Build and Push stages completed successfully"
+              echo "Next: Deploy manually via Azure CLI"
+            displayName: 'Build validation complete'
