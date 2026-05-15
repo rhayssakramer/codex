@@ -1,0 +1,7 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/codex-tech-frontend",
+  "env": {
+    "API_URL": "https://codex-api.wonderfulriver-f866d6ee.brazilsouth.azurecontainerapps.io"
+  }
+}

@@ -5,8 +5,6 @@ param environment string
 param neonConnectionString string
 param containerAppEnvName string
 param containerAppName string
-param appServicePlanName string
-param appServiceName string
 param containerRegistryName string
 param keyVaultName string
 param userAssignedIdentityName string
@@ -199,96 +197,9 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
   }
 }
 
-// Criar App Service Plan (Free)
-resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' = {
-  name: appServicePlanName
-  location: location
-  kind: 'linux'
-  sku: {
-    name: 'F1'
-    tier: 'Free'
-  }
-  properties: {
-    reserved: true
-  }
-}
-
-// Criar App Service (Frontend)
-resource appService 'Microsoft.Web/sites@2023-12-01' = {
-  name: appServiceName
-  location: location
-  identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: {
-      '${userAssignedIdentity.id}': {}
-    }
-  }
-  properties: {
-    serverFarmId: appServicePlan.id
-    httpsOnly: true
-    siteConfig: {
-      linuxFxVersion: 'NODE|20-lts'
-      appSettings: [
-        {
-          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: appInsights.properties.ConnectionString
-        }
-        {
-          name: 'ApplicationInsightsAgent_EXTENSION_VERSION'
-          value: '~3'
-        }
-        {
-          name: 'XDT_MicrosoftApplicationInsights_Mode'
-          value: 'recommended'
-        }
-        {
-          name: 'API_URL'
-          value: 'https://${containerApp.properties.configuration.ingress.fqdn}'
-        }
-        {
-          name: 'NODE_ENV'
-          value: 'production'
-        }
-      ]
-      connectionStrings: []
-      numberOfWorkers: 1
-      defaultDocuments: [
-        'index.html'
-      ]
-      handlerMappings: []
-    }
-  }
-}
-
-// Configuração de logging do App Service
-resource appServiceDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'appServiceDiags'
-  scope: appService
-  properties: {
-    workspaceId: logAnalytics.id
-    logs: [
-      {
-        category: 'AppServicePlatformLogs'
-        enabled: true
-      }
-      {
-        category: 'AppServiceHTTPLogs'
-        enabled: true
-      }
-    ]
-    metrics: [
-      {
-        category: 'AllMetrics'
-        enabled: true
-      }
-    ]
-  }
-}
-
 // Outputs
 output containerRegistryUrl string = containerRegistry.properties.loginServer
 output containerAppUrl string = 'https://${containerApp.properties.configuration.ingress.fqdn}'
-output appServiceUrl string = 'https://${appService.properties.defaultHostName}'
 output keyVaultId string = keyVault.id
 output containerAppEnvId string = containerAppEnv.id
 output userAssignedIdentityId string = userAssignedIdentity.id

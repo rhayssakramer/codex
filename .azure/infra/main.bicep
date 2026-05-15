@@ -11,8 +11,6 @@ param neonConnectionString string
 // Variáveis
 var containerAppEnvName = '${projectName}-cae'
 var containerAppName = '${projectName}-api'
-var appServicePlanName = '${projectName}-asp'
-var appServiceName = '${projectName}-web'
 var containerRegistryName = '${projectName}acr2'
 var keyVaultName = '${projectName}-kv-${uniqueString(resourceGroup().id)}'
 var userAssignedIdentityName = '${projectName}-umi'
@@ -29,8 +27,6 @@ module infrastructure 'modules/infrastructure.bicep' = {
     neonConnectionString: neonConnectionString
     containerAppEnvName: containerAppEnvName
     containerAppName: containerAppName
-    appServicePlanName: appServicePlanName
-    appServiceName: appServiceName
     containerRegistryName: containerRegistryName
     keyVaultName: keyVaultName
     userAssignedIdentityName: userAssignedIdentityName
@@ -42,5 +38,4 @@ module infrastructure 'modules/infrastructure.bicep' = {
 output resourceGroupName string = resourceGroup().name
 output containerRegistryUrl string = infrastructure.outputs.containerRegistryUrl
 output containerAppUrl string = infrastructure.outputs.containerAppUrl
-output appServiceUrl string = infrastructure.outputs.appServiceUrl
 output keyVaultId string = infrastructure.outputs.keyVaultId
