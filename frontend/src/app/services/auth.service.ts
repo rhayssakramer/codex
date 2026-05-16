@@ -1,5 +1,22 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+
+interface AuthResponse {
+  sucesso: boolean;
+  mensagem?: string;
+  dados?: {
+    id: number;
+    email: string;
+    nome: string;
+    sobrenome: string;
+    avatar?: string;
+    token: string;
+    tokenExpiresAt: string;
+    papel: string;
+  };
+}
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +28,10 @@ export class AuthService {
   private userSubject = new BehaviorSubject<any>(null);
   public user$ = this.userSubject.asObservable();
 
-  constructor() {
+  constructor(private http: HttpClient) {
     const token = localStorage.getItem('auth_token');
     if (token) {
       const user = JSON.parse(localStorage.getItem('user') || '{}');
-      // Garantir que role existe (para o admin user)
       if (user.email === 'admin@codex.com.br') {
         user.role = 'admin';
       }
@@ -24,108 +40,77 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<any> {
-    return new Observable(observer => {
-      // Simular autenticação
-      setTimeout(() => {
-        const user: any = {
-          id: 1,
-          email: email,
-          name: email.split('@')[0],
-          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`
-        };
+    return this.http.post<AuthResponse>('/api/auth/login', { email, senha: password }).pipe(
+      map(response => {
+        if (response.sucesso && response.dados) {
+          const data = response.dados;
+          const user: any = {
+            id: data.id,
+            email: data.email,
+            name: data.nome,
+            surname: data.sobrenome,
+            avatar: data.avatar,
+            role: data.papel
+          };
 
-        // Adicionar role para admin
-        if (email === 'admin@codex.com.br') {
-          user.role = 'admin';
+          localStorage.setItem('auth_token', data.token);
+          localStorage.setItem('user', JSON.stringify(user));
+
+          this.userSubject.next(user);
+          this.isAuthenticatedSubject.next(true);
+
+          return user;
         }
-        
-        localStorage.setItem('auth_token', 'fake_token_' + Date.now());
-        localStorage.setItem('user', JSON.stringify(user));
-        
-        this.userSubject.next(user);
-        this.isAuthenticatedSubject.next(true);
-        
-        observer.next(user);
-        observer.complete();
-      }, 1000);
-    });
+        throw new Error(response.mensagem || 'Erro ao fazer login');
+      }),
+      catchError(error => {
+        const msg = error?.error?.mensagem || error?.message || 'Email ou senha inválidos';
+        throw new Error(msg);
+      })
+    );
   }
 
-  register(email: string, password: string): Observable<any> {
-    return new Observable(observer => {
-      // Simular registro
-      setTimeout(() => {
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        
-        // Verificar se o email já existe
-        if (users.some((u: any) => u.email === email)) {
-          observer.error({ message: 'Email já cadastrado' });
-          return;
+  register(email: string, password: string, nome?: string, sobrenome?: string): Observable<any> {
+    return this.http.post<AuthResponse>('/api/auth/register', {
+      email,
+      senha: password,
+      confirmarSenha: password,
+      nome: nome || email.split('@')[0],
+      sobrenome: sobrenome || ''
+    }).pipe(
+      map(response => {
+        if (response.sucesso) {
+          return { success: true, message: 'Conta criada com sucesso' };
         }
-        
-        // Criar novo usuário
-        const user = {
-          id: users.length + 1,
-          email: email,
-          password: password, // Em produção, seria hasheada
-          name: email.split('@')[0],
-          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
-          createdAt: new Date()
-        };
-        
-        users.push(user);
-        localStorage.setItem('users', JSON.stringify(users));
-        
-        observer.next({ success: true, message: 'Conta criada com sucesso' });
-        observer.complete();
-      }, 1000);
-    });
+        throw new Error(response.mensagem || 'Erro ao registrar');
+      }),
+      catchError(error => {
+        const msg = error?.error?.mensagem || error?.message || 'Erro ao registrar';
+        throw new Error(msg);
+      })
+    );
   }
 
   socialLogin(email: string, provider: 'google' | 'outlook'): Observable<any> {
     return new Observable(observer => {
-      // Simular login social
       setTimeout(() => {
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        
-        // Procurar por usuário existente
-        const existingUser = users.find((u: any) => u.email === email);
-        
-        if (existingUser) {
-          // Usuário existe, fazer login
-          localStorage.setItem('auth_token', 'fake_token_' + Date.now());
-          localStorage.setItem('user', JSON.stringify(existingUser));
-          localStorage.setItem('loginProvider', provider);
-          
-          this.userSubject.next(existingUser);
-          this.isAuthenticatedSubject.next(true);
-          
-          observer.next(existingUser);
-          observer.complete();
-        } else {
-          // Usuário não existe, criar novo
-          const newUser = {
-            id: users.length + 1,
-            email: email,
-            name: email.split('@')[0],
-            avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
-            provider: provider,
-            createdAt: new Date()
-          };
-          
-          users.push(newUser);
-          localStorage.setItem('users', JSON.stringify(users));
-          localStorage.setItem('auth_token', 'fake_token_' + Date.now());
-          localStorage.setItem('user', JSON.stringify(newUser));
-          localStorage.setItem('loginProvider', provider);
-          
-          this.userSubject.next(newUser);
-          this.isAuthenticatedSubject.next(true);
-          
-          observer.next(newUser);
-          observer.complete();
-        }
-      }, 1000);
+        const user: any = {
+          id: Date.now(),
+          email: email,
+          name: email.split('@')[0],
+          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
+          provider: provider
+        };
+
+        localStorage.setItem('auth_token', 'social_token_' + Date.now());
+        localStorage.setItem('user', JSON.stringify(user));
+
+        this.userSubject.next(user);
+        this.isAuthenticatedSubject.next(true);
+
+        observer.next(user);
+        observer.complete();
+      }, 500);
     });
   }
 
@@ -148,15 +133,32 @@ export class AuthService {
     return this.userSubject.value;
   }
 
+  getToken(): string | null {
+    return localStorage.getItem('auth_token');
+  }
+
   updateUserProfile(profileData: any): void {
+    const token = this.getToken();
     const user = this.userSubject.value;
-    if (user) {
-      const updatedUser = {
-        ...user,
-        ...profileData
-      };
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      this.userSubject.next(updatedUser);
+
+    if (!user) return;
+
+    const updatedUser = { ...user, ...profileData };
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    this.userSubject.next(updatedUser);
+
+    // Persist to backend
+    if (token && !token.startsWith('social_token_')) {
+      this.http.put<any>('/api/auth/perfil', {
+        nome: profileData.name || profileData.nome,
+        sobrenome: profileData.surname || profileData.sobrenome,
+        avatar: profileData.avatar
+      }, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      }).subscribe({
+        next: () => console.log('Perfil salvo no servidor'),
+        error: () => console.warn('Falha ao salvar perfil no servidor (dados salvos localmente)')
+      });
     }
   }
 }

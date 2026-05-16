@@ -263,16 +263,20 @@ export class ProfileEditComponent implements OnInit {
       updatedUser.avatar = this.profileFotoPreview;
     }
     localStorage.setItem('user', JSON.stringify(updatedUser));
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('auth_token');
     if (token) {
-      this.http.put('/api/usuarios/perfil', updatedUser, {
+      this.http.put('/api/auth/perfil', {
+        nome: this.profileData.name,
+        sobrenome: this.profileData.surname,
+        avatar: updatedUser.avatar
+      }, {
         headers: { 'Authorization': `Bearer ${token}` }
       }).subscribe({
         next: () => {
           this.toaster.success('Perfil atualizado com sucesso!');
         },
         error: () => {
-          this.toaster.success('Perfil atualizado com sucesso!');
+          this.toaster.success('Perfil salvo localmente!');
         }
       });
     } else {
