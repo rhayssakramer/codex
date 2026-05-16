@@ -29,12 +29,7 @@
         </div>
 
         <div class="form-group password-group">
-          <div class="password-header">
-            <label for="password">Senha</label>
-            <a href="#" class="forgot-password" (click)="$event.preventDefault(); forgotPassword()">
-              Esqueci a senha
-            </a>
-          </div>
+          <label for="password">Senha</label>
           <div class="password-input-wrapper">
             <input
               [type]="showPassword ? 'text' : 'password'"
@@ -53,6 +48,9 @@
               <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
             </button>
           </div>
+          <a href="#" class="forgot-password" (click)="$event.preventDefault(); forgotPassword()">
+            Esqueci a senha
+          </a>
         </div>
 
         <div *ngIf="error" class="error-message">
