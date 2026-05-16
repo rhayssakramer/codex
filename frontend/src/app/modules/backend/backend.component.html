@@ -1,14 +1,16 @@
 <div class="area-container">
   <div *ngIf="!visualizandoDisciplina">
-    <div class="disciplinas-grid">
+    <div *ngIf="loading" class="loading-text">Carregando disciplinas...</div>
+    <div *ngIf="!loading && disciplinas.length === 0" class="empty-text">Nenhuma disciplina encontrada.</div>
+    <div class="disciplinas-grid" *ngIf="!loading && disciplinas.length > 0">
       <div *ngFor="let disciplina of disciplinas" class="card-disciplina" (click)="entrarDisciplina(disciplina.id)">
         <h3>{{ disciplina.nome }}</h3>
         <p>{{ disciplina.descricao }}</p>
         
         <div class="progress-bar">
-          <div class="progress" [style.width.%]="disciplina.progresso"></div>
+          <div class="progress" [style.width.%]="disciplina.progresso || 0"></div>
         </div>
-        <span class="progress-text">{{ disciplina.progresso }}% concluído</span>
+        <span class="progress-text">{{ disciplina.progresso || 0 }}% concluído</span>
         
         <button class="btn-estudar">Entrar</button>
       </div>
