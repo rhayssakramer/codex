@@ -34,14 +34,15 @@ export class ContentManagerComponent implements OnInit {
   deletingContent: Content | null = null;
   searchFilter: string = '';
 
-  areas = ['Fundamentos', 'Frontend', 'Backend', 'DevOps', 'Certificações'];
+  areas = ['Fundamentos', 'Frontend', 'Backend', 'DevOps', 'Certificações', 'Controle de Versão'];
   
   disciplinasByArea: { [key: string]: string[] } = {
-    'Fundamentos': ['Lógica de Programação', 'Algoritmos', 'Estruturas de Dados', 'Versionamento com Git', 'Terminal e Command Line'],
-    'Frontend': ['HTML & CSS', 'JavaScript Essencial', 'React', 'Angular', 'Vue.js', 'TypeScript'],
-    'Backend': ['Node.js & Express', 'Python & Django', 'Java & Spring Boot', 'Bancos de Dados SQL', 'Bancos NoSQL', 'APIs RESTful'],
-    'DevOps': ['Docker & Containers', 'Kubernetes', 'CI/CD', 'AWS', 'Terraform', 'Monitoring & Logs'],
-    'Certificações': ['JavaScript Certificado', 'React Advanced', 'AWS Solutions Architect', 'Google Cloud Professional', 'Kubernetes Associate']
+    'Fundamentos': ['Lógica de Programação', 'Estruturas de Dados'],
+    'Frontend': ['HTML & CSS', 'JavaScript'],
+    'Backend': ['C# & .NET', 'C#', '.NET'],
+    'DevOps': [],
+    'Certificações': ['AZ-900', 'AI-900', 'GH-900', 'GH-300'],
+    'Controle de Versão': ['Git', 'GitHub']
   };
 
   // Mapa de disciplinas para IDs (do seed data da API)
@@ -51,6 +52,14 @@ export class ContentManagerComponent implements OnInit {
     'HTML & CSS': 3,
     'JavaScript': 4,
     'C# & .NET': 5,
+    'C#': 6,
+    '.NET': 7,
+    'AZ-900': 8,
+    'AI-900': 9,
+    'GH-900': 10,
+    'GH-300': 11,
+    'Git': 12,
+    'GitHub': 13,
     'Operações': 1  // Fallback para ID 1
   };
 

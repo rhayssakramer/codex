@@ -1,0 +1,44 @@
+{
+  "version": "2.0.0",
+  "configurations": [
+    {
+      "name": "Deploy to Azure",
+      "type": "shell",
+      "command": "bash",
+      "isBackground": false,
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "windows": {
+        "command": "cmd",
+        "args": ["/c", ".azure\\deploy.bat"]
+      },
+      "osx": {
+        "command": "bash",
+        "args": ["./.azure/deploy.sh"]
+      },
+      "linux": {
+        "command": "bash",
+        "args": ["./.azure/deploy.sh"]
+      }
+    },
+    {
+      "name": "Check Azure Status",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "az group show -n codex-rg && az containerapp show -g codex-rg -n codex-api && az webapp show -g codex-rg -n codex-web"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    }
+  ]
+}
