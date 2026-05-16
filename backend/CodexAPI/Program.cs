@@ -68,9 +68,20 @@ builder.Services.AddCors(options =>
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var secretKey = builder.Configuration["Jwt:SecretKey"];
 
+// Resolver variável de ambiente se é placeholder
+if (!string.IsNullOrEmpty(secretKey) && secretKey.StartsWith("${"))
+{
+    var envVarName = secretKey.TrimStart('$', '{').TrimEnd('}');
+    secretKey = Environment.GetEnvironmentVariable(envVarName);
+}
 if (string.IsNullOrEmpty(secretKey))
 {
-    throw new InvalidOperationException("JWT SecretKey não configurada");
+    secretKey = Environment.GetEnvironmentVariable("Jwt__SecretKey");
+}
+
+if (string.IsNullOrEmpty(secretKey))
+{
+    throw new InvalidOperationException("JWT SecretKey não configurada. Defina Jwt__SecretKey como variável de ambiente.");
 }
 
 var key = Encoding.ASCII.GetBytes(secretKey);
@@ -111,9 +122,23 @@ builder.Services.AddAuthentication(options =>
 var environment = builder.Environment.EnvironmentName;
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+// Resolver variáveis de ambiente se o valor contém placeholder ${...}
+if (!string.IsNullOrEmpty(connectionString) && connectionString.StartsWith("${"))
+{
+    var envVarName = connectionString.TrimStart('$', '{').TrimEnd('}');
+    connectionString = Environment.GetEnvironmentVariable(envVarName);
+}
+
+// Fallback: tentar ler diretamente da variável de ambiente NEON_DATABASE_URL
 if (string.IsNullOrEmpty(connectionString))
 {
-    throw new InvalidOperationException("Connection string não configurada");
+    connectionString = Environment.GetEnvironmentVariable("NEON_DATABASE_URL")
+        ?? Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
+}
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("Connection string não configurada. Defina NEON_DATABASE_URL ou ConnectionStrings__DefaultConnection.");
 }
 
 if (environment == "Development")
@@ -245,8 +270,8 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Erro ao aplicar migrations");
-        throw;
+        logger.LogError(ex, "Erro ao aplicar migrations. O app continuará sem migrations.");
+        // Não faz throw para não crashar o container - permite health check diagnosticar
     }
 }
 
