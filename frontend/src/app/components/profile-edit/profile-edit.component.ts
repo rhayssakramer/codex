@@ -283,11 +283,21 @@ export class ProfileEditComponent implements OnInit {
         headers: { 'Authorization': `Bearer ${token}` }
       }).subscribe({
         next: (response: any) => {
-          // Update local user with server response (has immutability rules applied)
           if (response?.dados) {
             const d = response.dados;
+            updatedUser.name = d.nome || updatedUser.name;
+            updatedUser.surname = d.sobrenome || updatedUser.surname;
+            updatedUser.avatar = d.avatar || updatedUser.avatar;
             updatedUser.cpf = d.cpf || updatedUser.cpf;
             updatedUser.dataNascimento = d.dataNascimento || updatedUser.dataNascimento;
+            updatedUser.genero = d.genero || updatedUser.genero;
+            updatedUser.cep = d.cep || updatedUser.cep;
+            updatedUser.rua = d.rua || updatedUser.rua;
+            updatedUser.numero = d.numero || updatedUser.numero;
+            updatedUser.complemento = d.complemento || updatedUser.complemento;
+            updatedUser.bairro = d.bairro || updatedUser.bairro;
+            updatedUser.cidade = d.cidade || updatedUser.cidade;
+            updatedUser.estado = d.estado || updatedUser.estado;
             localStorage.setItem('user', JSON.stringify(updatedUser));
           }
           this.toaster.success('Perfil atualizado com sucesso!');

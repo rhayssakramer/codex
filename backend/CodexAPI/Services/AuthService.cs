@@ -219,10 +219,10 @@ public class AuthService : IAuthService
             if (request.Avatar != null)
                 usuario.Avatar = request.Avatar;
 
-            // CPF e DataNascimento: só pode setar uma vez (imutável depois)
-            if (!string.IsNullOrWhiteSpace(request.Cpf) && string.IsNullOrWhiteSpace(usuario.Cpf))
+            // CPF e DataNascimento: editáveis
+            if (!string.IsNullOrWhiteSpace(request.Cpf))
                 usuario.Cpf = request.Cpf;
-            if (!string.IsNullOrWhiteSpace(request.DataNascimento) && usuario.DataNascimento == null)
+            if (!string.IsNullOrWhiteSpace(request.DataNascimento))
             {
                 if (DateTime.TryParse(request.DataNascimento, out var dt))
                     usuario.DataNascimento = dt;
