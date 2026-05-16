@@ -36,11 +36,43 @@ export class AuthService {
         user.role = 'admin';
       }
       this.userSubject.next(user);
+
+      // Refresh profile from server to ensure data is up-to-date
+      this.http.get<any>('/api/auth/me', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      }).subscribe({
+        next: (response) => {
+          if (response.sucesso && response.dados) {
+            const d = response.dados;
+            const fullUser: any = {
+              id: d.id,
+              email: d.email,
+              name: d.nome,
+              surname: d.sobrenome,
+              avatar: d.avatar,
+              role: d.papel,
+              cpf: d.cpf || '',
+              dataNascimento: d.dataNascimento || '',
+              genero: d.genero || '',
+              cep: d.cep || '',
+              rua: d.rua || '',
+              numero: d.numero || '',
+              complemento: d.complemento || '',
+              bairro: d.bairro || '',
+              cidade: d.cidade || '',
+              estado: d.estado || ''
+            };
+            localStorage.setItem('user', JSON.stringify(fullUser));
+            this.userSubject.next(fullUser);
+          }
+        },
+        error: () => {}
+      });
     }
   }
 
   login(email: string, password: string): Observable<any> {
-    return this.http.post<AuthResponse>('/api/auth/login', { email, senha: password }).pipe(
+    return this.http.post<any>('/api/auth/login', { email, senha: password }).pipe(
       map(response => {
         if (response.sucesso && response.dados) {
           const data = response.dados;
@@ -50,7 +82,17 @@ export class AuthService {
             name: data.nome,
             surname: data.sobrenome,
             avatar: data.avatar,
-            role: data.papel
+            role: data.papel,
+            cpf: data.cpf || '',
+            dataNascimento: data.dataNascimento || '',
+            genero: data.genero || '',
+            cep: data.cep || '',
+            rua: data.rua || '',
+            numero: data.numero || '',
+            complemento: data.complemento || '',
+            bairro: data.bairro || '',
+            cidade: data.cidade || '',
+            estado: data.estado || ''
           };
 
           localStorage.setItem('auth_token', data.token);
@@ -58,9 +100,6 @@ export class AuthService {
 
           this.userSubject.next(user);
           this.isAuthenticatedSubject.next(true);
-
-          // Load full profile from /api/auth/me to get all fields
-          this.loadFullProfile(data.token);
 
           return user;
         }
@@ -71,39 +110,6 @@ export class AuthService {
         throw new Error(msg);
       })
     );
-  }
-
-  private loadFullProfile(token: string): void {
-    this.http.get<any>('/api/auth/me', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    }).subscribe({
-      next: (response) => {
-        if (response.sucesso && response.dados) {
-          const d = response.dados;
-          const user: any = {
-            id: d.id,
-            email: d.email,
-            name: d.nome,
-            surname: d.sobrenome,
-            avatar: d.avatar,
-            role: d.papel,
-            cpf: d.cpf || '',
-            dataNascimento: d.dataNascimento || '',
-            genero: d.genero || '',
-            cep: d.cep || '',
-            rua: d.rua || '',
-            numero: d.numero || '',
-            complemento: d.complemento || '',
-            bairro: d.bairro || '',
-            cidade: d.cidade || '',
-            estado: d.estado || ''
-          };
-          localStorage.setItem('user', JSON.stringify(user));
-          this.userSubject.next(user);
-        }
-      },
-      error: () => {}
-    });
   }
 
   register(email: string, password: string, nome?: string, sobrenome?: string): Observable<any> {
@@ -202,7 +208,30 @@ export class AuthService {
       }, {
         headers: { 'Authorization': `Bearer ${token}` }
       }).subscribe({
-        next: () => console.log('Perfil salvo no servidor'),
+        next: (response) => {
+          if (response?.dados) {
+            const d = response.dados;
+            const serverUser: any = {
+              ...updatedUser,
+              name: d.nome,
+              surname: d.sobrenome,
+              avatar: d.avatar,
+              cpf: d.cpf || '',
+              dataNascimento: d.dataNascimento || '',
+              genero: d.genero || '',
+              cep: d.cep || '',
+              rua: d.rua || '',
+              numero: d.numero || '',
+              complemento: d.complemento || '',
+              bairro: d.bairro || '',
+              cidade: d.cidade || '',
+              estado: d.estado || ''
+            };
+            localStorage.setItem('user', JSON.stringify(serverUser));
+            this.userSubject.next(serverUser);
+          }
+          console.log('Perfil salvo no servidor');
+        },
         error: () => console.warn('Falha ao salvar perfil no servidor (dados salvos localmente)')
       });
     }

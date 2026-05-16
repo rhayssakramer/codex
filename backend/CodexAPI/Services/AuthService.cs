@@ -65,7 +65,17 @@ public class AuthService : IAuthService
                 Avatar = usuario.Avatar,
                 Token = token,
                 TokenExpiresAt = expiresAt,
-                Papel = usuario.Papel ?? "usuario"
+                Papel = usuario.Papel ?? "usuario",
+                Cpf = usuario.Cpf,
+                DataNascimento = usuario.DataNascimento?.ToString("yyyy-MM-dd"),
+                Genero = usuario.Genero,
+                Cep = usuario.Cep,
+                Rua = usuario.Rua,
+                Numero = usuario.Numero,
+                Complemento = usuario.Complemento,
+                Bairro = usuario.Bairro,
+                Cidade = usuario.Cidade,
+                Estado = usuario.Estado
             };
         }
         catch (Exception ex)
