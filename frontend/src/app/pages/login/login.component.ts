@@ -228,7 +228,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.registerError = '';
 
-    this.authService.register(this.registerEmail, this.registerPassword).subscribe({
+    const avatarBase64 = this.registerFotoPreview && typeof this.registerFotoPreview === 'string'
+      ? this.registerFotoPreview
+      : undefined;
+
+    this.authService.register(
+      this.registerEmail,
+      this.registerPassword,
+      this.registerNome,
+      this.registerSobrenome,
+      avatarBase64
+    ).subscribe({
       next: () => {
         this.toaster.success('Conta criada com sucesso! Faça login para continuar.');
         this.closeRegisterModal();

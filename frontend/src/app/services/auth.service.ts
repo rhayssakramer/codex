@@ -112,13 +112,14 @@ export class AuthService {
     );
   }
 
-  register(email: string, password: string, nome?: string, sobrenome?: string): Observable<any> {
+  register(email: string, password: string, nome?: string, sobrenome?: string, avatar?: string): Observable<any> {
     return this.http.post<AuthResponse>('/api/auth/register', {
       email,
       senha: password,
       confirmarSenha: password,
       nome: nome || email.split('@')[0],
-      sobrenome: sobrenome || ''
+      sobrenome: sobrenome || '',
+      avatar: avatar || null
     }).pipe(
       map(response => {
         if (response.sucesso) {

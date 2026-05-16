@@ -279,8 +279,8 @@ public class AuthService : IAuthService
         }
     }
 
-    private string GenerateDefaultAvatar(string email)
+    private string? GenerateDefaultAvatar(string email)
     {
-        return $"https://api.dicebear.com/7.x/avataaars/svg?seed={Uri.EscapeDataString(email)}";
+        return null;
     }
 }
