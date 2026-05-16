@@ -12,6 +12,7 @@ public interface IAuthService
     Task<AuthResponseDto?> LoginAsync(LoginRequestDto request);
     Task<AuthResponseDto?> RegisterAsync(RegisterRequestDto request);
     Task<UsuarioDto?> GetCurrentUserAsync(int usuarioId);
+    Task<UsuarioDto?> UpdateProfileAsync(int usuarioId, UpdateProfileDto request);
     string GenerateToken(Usuario usuario);
 }
 
@@ -182,6 +183,42 @@ public class AuthService : IAuthService
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public async Task<UsuarioDto?> UpdateProfileAsync(int usuarioId, UpdateProfileDto request)
+    {
+        try
+        {
+            var usuario = await _usuarioRepository.GetByIdAsync(usuarioId);
+            if (usuario == null) return null;
+
+            if (!string.IsNullOrWhiteSpace(request.Nome))
+                usuario.Nome = request.Nome;
+            if (!string.IsNullOrWhiteSpace(request.Sobrenome))
+                usuario.Sobrenome = request.Sobrenome;
+            if (request.Avatar != null)
+                usuario.Avatar = request.Avatar;
+
+            _usuarioRepository.Update(usuario);
+            await _usuarioRepository.SaveAsync();
+
+            return new UsuarioDto
+            {
+                Id = usuario.Id,
+                Email = usuario.Email,
+                Nome = usuario.Nome,
+                Sobrenome = usuario.Sobrenome,
+                Avatar = usuario.Avatar,
+                Ativo = usuario.Ativo,
+                DataCriacao = usuario.DataCriacao,
+                Papel = usuario.Papel ?? "usuario"
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao atualizar perfil");
+            return null;
+        }
     }
 
     private string GenerateDefaultAvatar(string email)

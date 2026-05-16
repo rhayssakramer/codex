@@ -192,4 +192,39 @@ public class AuthController : ControllerBase
             }
         });
     }
+
+    /// <summary>
+    /// Atualizar perfil do usuário autenticado
+    /// </summary>
+    [HttpPut("perfil")]
+    [Authorize]
+    public async Task<ActionResult<ApiResponse<UsuarioDto>>> UpdateProfile([FromBody] UpdateProfileDto request)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
+        {
+            return Unauthorized(new ApiResponse<UsuarioDto>
+            {
+                Sucesso = false,
+                Mensagem = "Usuário não autenticado"
+            });
+        }
+
+        var result = await _authService.UpdateProfileAsync(userId, request);
+        if (result == null)
+        {
+            return NotFound(new ApiResponse<UsuarioDto>
+            {
+                Sucesso = false,
+                Mensagem = "Usuário não encontrado"
+            });
+        }
+
+        return Ok(new ApiResponse<UsuarioDto>
+        {
+            Sucesso = true,
+            Mensagem = "Perfil atualizado com sucesso",
+            Dados = result
+        });
+    }
 }

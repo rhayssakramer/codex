@@ -41,6 +41,13 @@ public class UsuarioDto
     public string Papel { get; set; } = null!;
 }
 
+public class UpdateProfileDto
+{
+    public string? Nome { get; set; }
+    public string? Sobrenome { get; set; }
+    public string? Avatar { get; set; }
+}
+
 // Disciplina DTOs
 public class DisciplinaDto
 {
