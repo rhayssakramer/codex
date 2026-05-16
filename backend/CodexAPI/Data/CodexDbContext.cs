@@ -131,8 +131,8 @@ public class CodexDbContext : DbContext
 
     private void SeedData(ModelBuilder modelBuilder)
     {
-        // Usuário Admin
-        var adminPassword = BCrypt.Net.BCrypt.HashPassword("Admin@123");
+        // Usuário Admin - hash fixo para "Admin@123" (evita regeneração a cada migration)
+        const string adminPasswordHash = "$2a$11$Z9XRi3yU00qWRB5REoBS4OulWR7setX9CC5QmL6VHa1U01K30g1sm";
         var usuarios = new List<Usuario>
         {
             new Usuario 
@@ -141,11 +141,11 @@ public class CodexDbContext : DbContext
                 Email = "admin@codex.com.br", 
                 Nome = "Admin", 
                 Sobrenome = "Codex", 
-                SenhaHash = adminPassword,
+                SenhaHash = adminPasswordHash,
                 Papel = "admin",
                 Avatar = "https://i.pravatar.cc/150?img=1",
                 Ativo = true,
-                DataCriacao = DateTime.UtcNow
+                DataCriacao = new DateTime(2026, 5, 13, 16, 22, 57, 366, DateTimeKind.Utc)
             }
         };
         modelBuilder.Entity<Usuario>().HasData(usuarios);
