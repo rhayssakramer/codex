@@ -3,5 +3,24 @@
   "outputDirectory": "dist/codex-frontend",
   "env": {
     "API_URL": "https://codex-api.wonderfulriver-f866d6ee.brazilsouth.azurecontainerapps.io"
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://codex-api.wonderfulriver-f866d6ee.brazilsouth.azurecontainerapps.io/api/:path*"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "https://codex-api.wonderfulriver-f866d6ee.brazilsouth.azurecontainerapps.io/api/$1"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
