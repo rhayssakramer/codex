@@ -161,14 +161,22 @@ public class CodexDbContext : DbContext
         };
         modelBuilder.Entity<Area>().HasData(areas);
 
-        // Disciplinas para Fundamentos
+        // Disciplinas
         var disciplinas = new List<Disciplina>
         {
             new Disciplina { Id = 1, AreaId = 1, Nome = "Lógica de Programação", Descricao = "Princípios fundamentais", Ordem = 1, Ativo = true },
             new Disciplina { Id = 2, AreaId = 1, Nome = "Estruturas de Dados", Descricao = "Arrays, Listas, Pilhas", Ordem = 2, Ativo = true },
             new Disciplina { Id = 3, AreaId = 2, Nome = "HTML & CSS", Descricao = "Markup e estilos", Ordem = 1, Ativo = true },
             new Disciplina { Id = 4, AreaId = 2, Nome = "JavaScript", Descricao = "Linguagem do navegador", Ordem = 2, Ativo = true },
-            new Disciplina { Id = 5, AreaId = 3, Nome = "C# & .NET", Descricao = "Backend com C#", Ordem = 1, Ativo = true }
+            new Disciplina { Id = 5, AreaId = 3, Nome = "C#", Descricao = "Linguagem de programação C#", Ordem = 1, Ativo = true },
+            new Disciplina { Id = 6, AreaId = 3, Nome = ".NET", Descricao = "Framework .NET para aplicações web e desktop", Ordem = 2, Ativo = true },
+            new Disciplina { Id = 7, AreaId = 3, Nome = "JavaScript", Descricao = "JavaScript no backend com Node.js", Ordem = 3, Ativo = true },
+            new Disciplina { Id = 8, AreaId = 5, Nome = "AZ-900", Descricao = "Certificação fundamentals Microsoft Azure", Ordem = 1, Ativo = true },
+            new Disciplina { Id = 9, AreaId = 5, Nome = "AI-900", Descricao = "Certificação AI fundamentals Microsoft Azure", Ordem = 2, Ativo = true },
+            new Disciplina { Id = 10, AreaId = 5, Nome = "GH-900", Descricao = "Certificação GitHub fundamentals", Ordem = 3, Ativo = true },
+            new Disciplina { Id = 11, AreaId = 5, Nome = "GH-300", Descricao = "Certificação GitHub advanced", Ordem = 4, Ativo = true },
+            new Disciplina { Id = 12, AreaId = 4, Nome = "Git", Descricao = "Sistema de controle de versão distribuído", Ordem = 1, Ativo = true },
+            new Disciplina { Id = 13, AreaId = 4, Nome = "GitHub", Descricao = "Plataforma de colaboração e hospedagem de repositórios", Ordem = 2, Ativo = true }
         };
         modelBuilder.Entity<Disciplina>().HasData(disciplinas);
 

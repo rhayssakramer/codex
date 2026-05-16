@@ -136,43 +136,71 @@ export class DisciplinaDetailComponent implements OnInit {
     ],
     backend: [
       {
-        id: 1,
-        nome: 'Node.js & Express',
-        descricao: 'Crie servidores web com JavaScript',
-        progresso: 78,
-        topicos: [
-          { id: 1, nome: 'Node.js Basics', descricao: 'Modules e npm', duracao: '25 min', concluido: true },
-          { id: 2, nome: 'Express Setup', descricao: 'Criando servidores', duracao: '20 min', concluido: true },
-          { id: 3, nome: 'Rotas e Middleware', descricao: 'Requisições e respostas', duracao: '25 min', concluido: true },
-          { id: 4, nome: 'Banco de Dados', descricao: 'Integração com BD', duracao: '30 min', concluido: false }
-        ]
+        id: 5,
+        nome: 'C#',
+        descricao: 'Linguagem de programação C#',
+        progresso: 0,
+        topicos: []
+      },
+      {
+        id: 6,
+        nome: '.NET',
+        descricao: 'Framework .NET para aplicações web e desktop',
+        progresso: 0,
+        topicos: []
+      },
+      {
+        id: 7,
+        nome: 'JavaScript',
+        descricao: 'JavaScript no backend com Node.js',
+        progresso: 0,
+        topicos: []
       }
     ],
     devops: [
       {
-        id: 1,
-        nome: 'Docker & Containers',
-        descricao: 'Containerização de aplicações',
-        progresso: 85,
-        topicos: [
-          { id: 1, nome: 'Introdução', descricao: 'O que é Docker', duracao: '15 min', concluido: true },
-          { id: 2, nome: 'Imagens', descricao: 'Criando Dockerfiles', duracao: '25 min', concluido: true },
-          { id: 3, nome: 'Containers', descricao: 'Executando e gerenciando', duracao: '20 min', concluido: true },
-          { id: 4, nome: 'Docker Compose', descricao: 'Multi-containers', duracao: '25 min', concluido: false }
-        ]
+        id: 12,
+        nome: 'Git',
+        descricao: 'Controle de versão com Git',
+        progresso: 0,
+        topicos: []
+      },
+      {
+        id: 13,
+        nome: 'GitHub',
+        descricao: 'Plataforma de colaboração e hospedagem de código',
+        progresso: 0,
+        topicos: []
       }
     ],
     certificacoes: [
       {
-        id: 1,
-        nome: 'JavaScript Certificado',
-        descricao: 'Certificação oficial de JavaScript',
-        progresso: 88,
-        topicos: [
-          { id: 1, nome: 'Módulo 1', descricao: 'Fundamentos JS', duracao: '60 min', concluido: true },
-          { id: 2, nome: 'Módulo 2', descricao: 'Avançado', duracao: '60 min', concluido: true },
-          { id: 3, nome: 'Teste Prático', descricao: 'Exercícios', duracao: '90 min', concluido: false }
-        ]
+        id: 8,
+        nome: 'AZ-900',
+        descricao: 'Certificação fundamentals Microsoft Azure',
+        progresso: 0,
+        topicos: []
+      },
+      {
+        id: 9,
+        nome: 'AI-900',
+        descricao: 'Certificação AI fundamentals Microsoft Azure',
+        progresso: 0,
+        topicos: []
+      },
+      {
+        id: 10,
+        nome: 'GH-900',
+        descricao: 'Certificação GitHub fundamentals',
+        progresso: 0,
+        topicos: []
+      },
+      {
+        id: 11,
+        nome: 'GH-300',
+        descricao: 'Certificação GitHub advanced',
+        progresso: 0,
+        topicos: []
       }
     ]
   };
