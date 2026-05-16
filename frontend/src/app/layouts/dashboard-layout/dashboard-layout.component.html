@@ -105,12 +105,12 @@
 
       <div class="user-section" *ngIf="user" (click)="$event.stopPropagation()">
         <button class="user-menu-button" (click)="toggleUserMenu()">
-          <img [src]="user.avatar" [alt]="user.name" class="user-avatar">
+          <img [src]="user.avatar || 'assets/user.png'" [alt]="user.name" class="user-avatar">
         </button>
 
         <div class="user-dropdown" *ngIf="userMenuOpen" (click)="$event.stopPropagation()">
           <div class="dropdown-header">
-            <img [src]="user.avatar" [alt]="user.name" class="dropdown-avatar">
+            <img [src]="user.avatar || 'assets/user.png'" [alt]="user.name" class="dropdown-avatar">
             <div class="dropdown-user-info">
               <p class="dropdown-name">{{ user.name }} {{ user.surname || '' }}</p>
               <p class="dropdown-email">{{ user.email }}</p>

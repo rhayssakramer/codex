@@ -49,7 +49,7 @@ export class AuthService {
               email: d.email,
               name: d.nome,
               surname: d.sobrenome,
-              avatar: d.avatar,
+              avatar: d.avatar || 'assets/user.png',
               role: d.papel,
               cpf: d.cpf || '',
               dataNascimento: d.dataNascimento || '',
@@ -81,7 +81,7 @@ export class AuthService {
             email: data.email,
             name: data.nome,
             surname: data.sobrenome,
-            avatar: data.avatar,
+            avatar: data.avatar || 'assets/user.png',
             role: data.papel,
             cpf: data.cpf || '',
             dataNascimento: data.dataNascimento || '',
@@ -140,7 +140,7 @@ export class AuthService {
           id: Date.now(),
           email: email,
           name: email.split('@')[0],
-          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
+          avatar: 'assets/user.png',
           provider: provider
         };
 
@@ -215,7 +215,7 @@ export class AuthService {
               ...updatedUser,
               name: d.nome,
               surname: d.sobrenome,
-              avatar: d.avatar,
+              avatar: d.avatar || 'assets/user.png',
               cpf: d.cpf || '',
               dataNascimento: d.dataNascimento || '',
               genero: d.genero || '',
