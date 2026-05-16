@@ -141,6 +141,19 @@ if (string.IsNullOrEmpty(connectionString))
     throw new InvalidOperationException("Connection string não configurada. Defina NEON_DATABASE_URL ou ConnectionStrings__DefaultConnection.");
 }
 
+// Converter URI do PostgreSQL (postgresql://user:pass@host/db) para formato Npgsql
+if (connectionString.StartsWith("postgresql://") || connectionString.StartsWith("postgres://"))
+{
+    var uri = new Uri(connectionString);
+    var userInfo = uri.UserInfo.Split(':');
+    var host = uri.Host;
+    var port = uri.Port > 0 ? uri.Port : 5432;
+    var database = uri.AbsolutePath.TrimStart('/');
+    var username = userInfo[0];
+    var password = userInfo.Length > 1 ? userInfo[1] : "";
+    connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
+}
+
 if (environment == "Development")
 {
     builder.Services.AddDbContext<CodexDbContext>(options =>
