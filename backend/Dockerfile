@@ -1,6 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
+COPY ["nuget.config", "."]
+COPY ["global.json", "."]
 COPY ["CodexAPI/CodexAPI.csproj", "CodexAPI/"]
 RUN dotnet restore "CodexAPI/CodexAPI.csproj"
 

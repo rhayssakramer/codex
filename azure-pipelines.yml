@@ -27,11 +27,11 @@ stages:
               command: build
               repository: $(imageRepository)
               dockerfile: $(dockerfilePath)
+              buildContext: '$(Build.SourcesDirectory)/backend'
               containerRegistryServiceConnection: $(dockerRegistryServiceConnection)
               tags: |
                 $(tag)
                 latest
-              arguments: '--build-arg BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)'
 
       - job: BuildFrontend
         displayName: Build Frontend Angular App
