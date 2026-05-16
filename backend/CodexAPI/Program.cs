@@ -282,8 +282,13 @@ using (var scope = app.Services.CreateScope())
         }
         else
         {
-            // Em produção (PostgreSQL), usar EnsureCreated para criar tabelas pelo modelo
-            // pois as migrations foram geradas para SQLite
+            // Em produção (PostgreSQL): dropar migration history se existir para permitir EnsureCreated
+            try
+            {
+                await context.Database.ExecuteSqlRawAsync("DROP TABLE IF EXISTS \"__EFMigrationsHistory\"");
+            }
+            catch { /* tabela pode não existir */ }
+            
             await context.Database.EnsureCreatedAsync();
         }
 
