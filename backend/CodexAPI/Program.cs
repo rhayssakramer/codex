@@ -274,17 +274,25 @@ using (var scope = app.Services.CreateScope())
         // Aplicar migrations
         var logger = services.GetRequiredService<ILogger<Program>>();
         logger.LogInformation($"Ambiente: {environment}");
-        logger.LogInformation("Aplicando migrations...");
+        logger.LogInformation("Inicializando banco de dados...");
 
-        await context.Database.MigrateAsync();
+        if (environment == "Development")
+        {
+            await context.Database.MigrateAsync();
+        }
+        else
+        {
+            // Em produção (PostgreSQL), usar EnsureCreated para criar tabelas pelo modelo
+            // pois as migrations foram geradas para SQLite
+            await context.Database.EnsureCreatedAsync();
+        }
 
-        logger.LogInformation("Migrations aplicadas com sucesso");
+        logger.LogInformation("Banco de dados inicializado com sucesso");
     }
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Erro ao aplicar migrations. O app continuará sem migrations.");
-        // Não faz throw para não crashar o container - permite health check diagnosticar
+        logger.LogError(ex, "Erro ao inicializar banco. O app continuará sem o banco.");
     }
 }
 
