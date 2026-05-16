@@ -821,27 +821,114 @@ ng build --configuration production
 
 **Output:** `dist/codex/browser/`
 
-### Deploy na Vercel
-
-A aplicação é deployada automaticamente na Vercel a cada push na branch principal.
-
-```bash
-# Configuração manual (se necessário)
-vercel --prod
-```
-
-### Build com SSR
+### Build com SSR (Server-Side Rendering)
 
 ```bash
 ng build --configuration production
 npm run build:ssr
 ```
 
-### Executar Build Local
+### Executar Servidor SSR Localmente
 
 ```bash
-npm run serve
+npm run serve:ssr
 ```
+
+**Disponível em:** `http://localhost:4000`
+
+### Executar Testes Unitários
+
+```bash
+npm test
+# ou
+ng test
+```
+
+### Executar Testes E2E
+
+```bash
+npm run e2e
+# ou
+ng e2e
+```
+
+### Lint e Verificação de Código
+
+```bash
+ng lint
+```
+
+---
+
+## 🚀 Deployment na Vercel
+
+### Deployment Automático
+
+O frontend é deployado automaticamente na Vercel a cada push na branch principal:
+
+1. **Conectar Repositório:** Acesse [vercel.com](https://vercel.com) e conecte seu repositório GitHub
+2. **Configuração:** A Vercel detecta automaticamente que é um projeto Angular
+3. **Build Command:** `npm run build` (configurado automaticamente)
+4. **Output Directory:** `dist/codex/browser/`
+5. **Environment Variables:** Configure variáveis de ambiente no painel da Vercel
+
+### Variáveis de Ambiente na Vercel
+
+Configure no painel de Settings → Environment Variables:
+
+```env
+NG_APP_API_BASE_URL=https://api.codex.com/api
+NG_APP_ENVIRONMENT=production
+NG_APP_JWT_TOKEN_KEY=codex_token
+NG_APP_UPLOAD_CHUNK_SIZE=5242880
+```
+
+### Deploy Manual
+
+```bash
+cd frontend
+
+# Instalar Vercel CLI globalmente (se não tiver)
+npm install -g vercel
+
+# Fazer login
+vercel login
+
+# Deploy para produção
+vercel --prod
+
+# Deploy para preview (staging)
+vercel
+```
+
+### Monitorar Deployment
+
+- Acesse o painel da Vercel em [vercel.com/dashboard](https://vercel.com/dashboard)
+- Visualize logs de build e runtime
+- Confira performance e analytics
+- Revert para versão anterior se necessário
+
+### Configuração vercel.json
+
+O arquivo `frontend/vercel.json` configura o deployment:
+
+```json
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/codex/browser",
+  "routes": [
+    {
+      "src": "^/(?!api).*",
+      "dest": "/index.html"
+    }
+  ]
+}
+```
+
+Esta configuração:
+- Define o comando de build
+- Define o diretório de saída otimizado
+- Roteia todas as URLs (exceto `/api`) para `index.html` (SPA routing)
 
 ---
 

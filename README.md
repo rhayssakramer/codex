@@ -453,13 +453,43 @@ dotnet publish -c Release -o ./publish
 
 ### Frontend — Vercel
 
-O frontend é deployado automaticamente na **Vercel** a cada push na branch principal. Configuração de rotas SPA em `frontend/vercel.json`.
+O frontend é deployado automaticamente na **Vercel** a cada push na branch principal. A configuração de deployment está em `frontend/vercel.json`.
+
+#### Deployment Automático
+
+1. **Configuração:** Conecte o repositório GitHub à Vercel
+2. **Trigger:** Cada push na branch `main` inicia o deployment
+3. **Build:** Vercel executa `npm run build` automaticamente
+4. **Output:** Saída otimizada em `dist/codex/browser/`
+
+#### Build Manual
 
 ```bash
-# Build manual
 cd frontend
+
+# Build para produção
 npm run build
-# Saída: dist/codex/browser/
+
+# Build com SSR
+npm run build:ssr
+
+# Teste localmente
+npm run serve
+```
+
+#### Deploy Manual (se necessário)
+
+```bash
+cd frontend
+
+# Fazer login na Vercel
+vercel login
+
+# Deploy para produção
+vercel --prod
+
+# Deploy para preview
+vercel
 ```
 
 ### URLs dos Ambientes
@@ -467,8 +497,8 @@ npm run build
 | Ambiente | Backend | Frontend |
 |----------|---------|---------|
 | Development | `http://localhost:5000` | `http://localhost:4200` |
-| Homolog | Render (Homolog) | — |
-| Production | `https://codex.onrender.com` | `https://codex.vercel.app` |
+| Homolog | Render (Staging) | Vercel Preview |
+| Production | `https://api.codex.com` | `https://codex.vercel.app` |
 
 ---
 
