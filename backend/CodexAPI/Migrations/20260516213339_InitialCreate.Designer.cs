@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CodexAPI.Migrations
 {
     [DbContext(typeof(CodexDbContext))]
-    [Migration("20260516211401_InitialCreate")]
+    [Migration("20260516213339_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -65,7 +65,7 @@ namespace CodexAPI.Migrations
                         {
                             Id = 1,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(7951),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 592, DateTimeKind.Utc).AddTicks(4471),
                             Descricao = "Conceitos básicos de programação",
                             Nome = "Fundamentos",
                             Ordem = 1
@@ -74,7 +74,7 @@ namespace CodexAPI.Migrations
                         {
                             Id = 2,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(8704),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 592, DateTimeKind.Utc).AddTicks(8345),
                             Descricao = "Desenvolvimento web frontend",
                             Nome = "Frontend",
                             Ordem = 2
@@ -83,7 +83,7 @@ namespace CodexAPI.Migrations
                         {
                             Id = 3,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(8707),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 592, DateTimeKind.Utc).AddTicks(8351),
                             Descricao = "Desenvolvimento web backend",
                             Nome = "Backend",
                             Ordem = 3
@@ -92,7 +92,7 @@ namespace CodexAPI.Migrations
                         {
                             Id = 4,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(8709),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 592, DateTimeKind.Utc).AddTicks(8353),
                             Descricao = "DevOps e infraestrutura",
                             Nome = "DevOps",
                             Ordem = 4
@@ -101,7 +101,7 @@ namespace CodexAPI.Migrations
                         {
                             Id = 5,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(8710),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 592, DateTimeKind.Utc).AddTicks(8355),
                             Descricao = "Preparação para certificações",
                             Nome = "Certificações",
                             Ordem = 5
@@ -193,7 +193,7 @@ namespace CodexAPI.Migrations
                             Id = 1,
                             AreaId = 1,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(9500),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 592, DateTimeKind.Utc).AddTicks(9577),
                             Descricao = "Princípios fundamentais",
                             Nome = "Lógica de Programação",
                             Ordem = 1
@@ -203,7 +203,7 @@ namespace CodexAPI.Migrations
                             Id = 2,
                             AreaId = 1,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(284),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(413),
                             Descricao = "Arrays, Listas, Pilhas",
                             Nome = "Estruturas de Dados",
                             Ordem = 2
@@ -213,9 +213,9 @@ namespace CodexAPI.Migrations
                             Id = 3,
                             AreaId = 2,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(288),
-                            Descricao = "Markup e estilos",
-                            Nome = "HTML & CSS",
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(416),
+                            Descricao = "Linguagem de marcação para estruturar páginas web",
+                            Nome = "HTML",
                             Ordem = 1
                         },
                         new
@@ -223,17 +223,27 @@ namespace CodexAPI.Migrations
                             Id = 4,
                             AreaId = 2,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(290),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(418),
+                            Descricao = "Estilização e layout de páginas web",
+                            Nome = "CSS",
+                            Ordem = 2
+                        },
+                        new
+                        {
+                            Id = 14,
+                            AreaId = 2,
+                            Ativo = true,
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(419),
                             Descricao = "Linguagem do navegador",
                             Nome = "JavaScript",
-                            Ordem = 2
+                            Ordem = 3
                         },
                         new
                         {
                             Id = 5,
                             AreaId = 3,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(292),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(423),
                             Descricao = "Linguagem de programação C#",
                             Nome = "C#",
                             Ordem = 1
@@ -243,7 +253,7 @@ namespace CodexAPI.Migrations
                             Id = 6,
                             AreaId = 3,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(295),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(424),
                             Descricao = "Framework .NET para aplicações web e desktop",
                             Nome = ".NET",
                             Ordem = 2
@@ -253,7 +263,7 @@ namespace CodexAPI.Migrations
                             Id = 7,
                             AreaId = 3,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(297),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(442),
                             Descricao = "JavaScript no backend com Node.js",
                             Nome = "JavaScript",
                             Ordem = 3
@@ -263,7 +273,7 @@ namespace CodexAPI.Migrations
                             Id = 8,
                             AreaId = 5,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(299),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(444),
                             Descricao = "Certificação fundamentals Microsoft Azure",
                             Nome = "AZ-900",
                             Ordem = 1
@@ -273,7 +283,7 @@ namespace CodexAPI.Migrations
                             Id = 9,
                             AreaId = 5,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(300),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(447),
                             Descricao = "Certificação AI fundamentals Microsoft Azure",
                             Nome = "AI-900",
                             Ordem = 2
@@ -283,7 +293,7 @@ namespace CodexAPI.Migrations
                             Id = 10,
                             AreaId = 5,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(303),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(448),
                             Descricao = "Certificação GitHub fundamentals",
                             Nome = "GH-900",
                             Ordem = 3
@@ -293,7 +303,7 @@ namespace CodexAPI.Migrations
                             Id = 11,
                             AreaId = 5,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(304),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(450),
                             Descricao = "Certificação GitHub advanced",
                             Nome = "GH-300",
                             Ordem = 4
@@ -303,7 +313,7 @@ namespace CodexAPI.Migrations
                             Id = 12,
                             AreaId = 4,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(306),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(452),
                             Descricao = "Sistema de controle de versão distribuído",
                             Nome = "Git",
                             Ordem = 1
@@ -313,7 +323,7 @@ namespace CodexAPI.Migrations
                             Id = 13,
                             AreaId = 4,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(307),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(453),
                             Descricao = "Plataforma de colaboração e hospedagem de repositórios",
                             Nome = "GitHub",
                             Ordem = 2
@@ -415,7 +425,7 @@ namespace CodexAPI.Migrations
                             Id = 1,
                             Ativo = true,
                             Conteudo = "Aprenda sobre variáveis...",
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(988),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(1145),
                             Dificuldade = 1,
                             DisciplinaId = 1,
                             Ordem = 1,
@@ -426,7 +436,7 @@ namespace CodexAPI.Migrations
                             Id = 2,
                             Ativo = true,
                             Conteudo = "Operadores aritméticos, lógicos...",
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1916),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(2107),
                             Dificuldade = 1,
                             DisciplinaId = 1,
                             Ordem = 2,
@@ -437,7 +447,7 @@ namespace CodexAPI.Migrations
                             Id = 3,
                             Ativo = true,
                             Conteudo = "If, else, switch...",
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1919),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(2111),
                             Dificuldade = 2,
                             DisciplinaId = 1,
                             Ordem = 3,
@@ -448,7 +458,7 @@ namespace CodexAPI.Migrations
                             Id = 4,
                             Ativo = true,
                             Conteudo = "For, while, do-while...",
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1922),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(2113),
                             Dificuldade = 2,
                             DisciplinaId = 1,
                             Ordem = 4,
@@ -459,7 +469,7 @@ namespace CodexAPI.Migrations
                             Id = 5,
                             Ativo = true,
                             Conteudo = "Trabalho com arrays...",
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1924),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(2115),
                             Dificuldade = 2,
                             DisciplinaId = 2,
                             Ordem = 1,
@@ -470,7 +480,7 @@ namespace CodexAPI.Migrations
                             Id = 6,
                             Ativo = true,
                             Conteudo = "Tags, atributos, semântica...",
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1927),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(2118),
                             Dificuldade = 1,
                             DisciplinaId = 3,
                             Ordem = 1,
@@ -481,9 +491,9 @@ namespace CodexAPI.Migrations
                             Id = 7,
                             Ativo = true,
                             Conteudo = "Variáveis, funções básicas...",
-                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1928),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(2120),
                             Dificuldade = 1,
-                            DisciplinaId = 4,
+                            DisciplinaId = 14,
                             Ordem = 1,
                             Titulo = "Primeiros Passos com JavaScript"
                         });
@@ -577,7 +587,7 @@ namespace CodexAPI.Migrations
                             Id = 1,
                             Ativo = true,
                             Avatar = "https://i.pravatar.cc/150?img=1",
-                            DataAtualizacao = new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(870),
+                            DataAtualizacao = new DateTime(2026, 5, 16, 21, 33, 38, 591, DateTimeKind.Utc).AddTicks(3087),
                             DataCriacao = new DateTime(2026, 5, 13, 16, 22, 57, 366, DateTimeKind.Utc),
                             Email = "admin@codex.com.br",
                             Nome = "Admin",

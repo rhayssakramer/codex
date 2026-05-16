@@ -175,36 +175,37 @@ namespace CodexAPI.Migrations
                 columns: new[] { "Id", "Ativo", "DataCriacao", "Descricao", "Icone", "Nome", "Ordem" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(7951), "Conceitos básicos de programação", null, "Fundamentos", 1 },
-                    { 2, true, new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(8704), "Desenvolvimento web frontend", null, "Frontend", 2 },
-                    { 3, true, new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(8707), "Desenvolvimento web backend", null, "Backend", 3 },
-                    { 4, true, new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(8709), "DevOps e infraestrutura", null, "DevOps", 4 },
-                    { 5, true, new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(8710), "Preparação para certificações", null, "Certificações", 5 }
+                    { 1, true, new DateTime(2026, 5, 16, 21, 33, 38, 592, DateTimeKind.Utc).AddTicks(4471), "Conceitos básicos de programação", null, "Fundamentos", 1 },
+                    { 2, true, new DateTime(2026, 5, 16, 21, 33, 38, 592, DateTimeKind.Utc).AddTicks(8345), "Desenvolvimento web frontend", null, "Frontend", 2 },
+                    { 3, true, new DateTime(2026, 5, 16, 21, 33, 38, 592, DateTimeKind.Utc).AddTicks(8351), "Desenvolvimento web backend", null, "Backend", 3 },
+                    { 4, true, new DateTime(2026, 5, 16, 21, 33, 38, 592, DateTimeKind.Utc).AddTicks(8353), "DevOps e infraestrutura", null, "DevOps", 4 },
+                    { 5, true, new DateTime(2026, 5, 16, 21, 33, 38, 592, DateTimeKind.Utc).AddTicks(8355), "Preparação para certificações", null, "Certificações", 5 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Usuarios",
                 columns: new[] { "Id", "Ativo", "Avatar", "Bairro", "Cep", "Cidade", "Complemento", "Cpf", "DataAtualizacao", "DataCriacao", "DataNascimento", "Email", "Estado", "Genero", "Nome", "Numero", "Papel", "Rua", "SenhaHash", "Sobrenome" },
-                values: new object[] { 1, true, "https://i.pravatar.cc/150?img=1", null, null, null, null, null, new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(870), new DateTime(2026, 5, 13, 16, 22, 57, 366, DateTimeKind.Utc), null, "admin@codex.com.br", null, null, "Admin", null, "admin", null, "$2a$11$Z9XRi3yU00qWRB5REoBS4OulWR7setX9CC5QmL6VHa1U01K30g1sm", "Codex" });
+                values: new object[] { 1, true, "https://i.pravatar.cc/150?img=1", null, null, null, null, null, new DateTime(2026, 5, 16, 21, 33, 38, 591, DateTimeKind.Utc).AddTicks(3087), new DateTime(2026, 5, 13, 16, 22, 57, 366, DateTimeKind.Utc), null, "admin@codex.com.br", null, null, "Admin", null, "admin", null, "$2a$11$Z9XRi3yU00qWRB5REoBS4OulWR7setX9CC5QmL6VHa1U01K30g1sm", "Codex" });
 
             migrationBuilder.InsertData(
                 table: "Disciplinas",
                 columns: new[] { "Id", "AreaId", "Ativo", "DataCriacao", "Descricao", "Imagem", "Nome", "Ordem" },
                 values: new object[,]
                 {
-                    { 1, 1, true, new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(9500), "Princípios fundamentais", null, "Lógica de Programação", 1 },
-                    { 2, 1, true, new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(284), "Arrays, Listas, Pilhas", null, "Estruturas de Dados", 2 },
-                    { 3, 2, true, new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(288), "Markup e estilos", null, "HTML & CSS", 1 },
-                    { 4, 2, true, new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(290), "Linguagem do navegador", null, "JavaScript", 2 },
-                    { 5, 3, true, new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(292), "Linguagem de programação C#", null, "C#", 1 },
-                    { 6, 3, true, new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(295), "Framework .NET para aplicações web e desktop", null, ".NET", 2 },
-                    { 7, 3, true, new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(297), "JavaScript no backend com Node.js", null, "JavaScript", 3 },
-                    { 8, 5, true, new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(299), "Certificação fundamentals Microsoft Azure", null, "AZ-900", 1 },
-                    { 9, 5, true, new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(300), "Certificação AI fundamentals Microsoft Azure", null, "AI-900", 2 },
-                    { 10, 5, true, new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(303), "Certificação GitHub fundamentals", null, "GH-900", 3 },
-                    { 11, 5, true, new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(304), "Certificação GitHub advanced", null, "GH-300", 4 },
-                    { 12, 4, true, new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(306), "Sistema de controle de versão distribuído", null, "Git", 1 },
-                    { 13, 4, true, new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(307), "Plataforma de colaboração e hospedagem de repositórios", null, "GitHub", 2 }
+                    { 1, 1, true, new DateTime(2026, 5, 16, 21, 33, 38, 592, DateTimeKind.Utc).AddTicks(9577), "Princípios fundamentais", null, "Lógica de Programação", 1 },
+                    { 2, 1, true, new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(413), "Arrays, Listas, Pilhas", null, "Estruturas de Dados", 2 },
+                    { 3, 2, true, new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(416), "Linguagem de marcação para estruturar páginas web", null, "HTML", 1 },
+                    { 4, 2, true, new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(418), "Estilização e layout de páginas web", null, "CSS", 2 },
+                    { 5, 3, true, new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(423), "Linguagem de programação C#", null, "C#", 1 },
+                    { 6, 3, true, new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(424), "Framework .NET para aplicações web e desktop", null, ".NET", 2 },
+                    { 7, 3, true, new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(442), "JavaScript no backend com Node.js", null, "JavaScript", 3 },
+                    { 8, 5, true, new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(444), "Certificação fundamentals Microsoft Azure", null, "AZ-900", 1 },
+                    { 9, 5, true, new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(447), "Certificação AI fundamentals Microsoft Azure", null, "AI-900", 2 },
+                    { 10, 5, true, new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(448), "Certificação GitHub fundamentals", null, "GH-900", 3 },
+                    { 11, 5, true, new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(450), "Certificação GitHub advanced", null, "GH-300", 4 },
+                    { 12, 4, true, new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(452), "Sistema de controle de versão distribuído", null, "Git", 1 },
+                    { 13, 4, true, new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(453), "Plataforma de colaboração e hospedagem de repositórios", null, "GitHub", 2 },
+                    { 14, 2, true, new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(419), "Linguagem do navegador", null, "JavaScript", 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -212,13 +213,13 @@ namespace CodexAPI.Migrations
                 columns: new[] { "Id", "Ativo", "CodigoExemplo", "Conteudo", "DataCriacao", "Dificuldade", "DisciplinaId", "Ordem", "Titulo", "VideoUrl" },
                 values: new object[,]
                 {
-                    { 1, true, null, "Aprenda sobre variáveis...", new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(988), 1, 1, 1, "Variáveis e Tipos", null },
-                    { 2, true, null, "Operadores aritméticos, lógicos...", new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1916), 1, 1, 2, "Operadores", null },
-                    { 3, true, null, "If, else, switch...", new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1919), 2, 1, 3, "Condicionais", null },
-                    { 4, true, null, "For, while, do-while...", new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1922), 2, 1, 4, "Laços de Repetição", null },
-                    { 5, true, null, "Trabalho com arrays...", new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1924), 2, 2, 1, "Arrays", null },
-                    { 6, true, null, "Tags, atributos, semântica...", new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1927), 1, 3, 1, "Introdução ao HTML", null },
-                    { 7, true, null, "Variáveis, funções básicas...", new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1928), 1, 4, 1, "Primeiros Passos com JavaScript", null }
+                    { 1, true, null, "Aprenda sobre variáveis...", new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(1145), 1, 1, 1, "Variáveis e Tipos", null },
+                    { 2, true, null, "Operadores aritméticos, lógicos...", new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(2107), 1, 1, 2, "Operadores", null },
+                    { 3, true, null, "If, else, switch...", new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(2111), 2, 1, 3, "Condicionais", null },
+                    { 4, true, null, "For, while, do-while...", new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(2113), 2, 1, 4, "Laços de Repetição", null },
+                    { 5, true, null, "Trabalho com arrays...", new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(2115), 2, 2, 1, "Arrays", null },
+                    { 6, true, null, "Tags, atributos, semântica...", new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(2118), 1, 3, 1, "Introdução ao HTML", null },
+                    { 7, true, null, "Variáveis, funções básicas...", new DateTime(2026, 5, 16, 21, 33, 38, 593, DateTimeKind.Utc).AddTicks(2120), 1, 14, 1, "Primeiros Passos com JavaScript", null }
                 });
 
             migrationBuilder.CreateIndex(

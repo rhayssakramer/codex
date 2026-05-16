@@ -110,28 +110,25 @@ export class DisciplinaDetailComponent implements OnInit {
     ],
     frontend: [
       {
-        id: 1,
-        nome: 'HTML & CSS',
-        descricao: 'Domine a estrutura e estilo de páginas web',
-        progresso: 90,
-        topicos: [
-          { id: 1, nome: 'HTML Semântico', descricao: 'Tags e estrutura', duracao: '20 min', concluido: true },
-          { id: 2, nome: 'CSS Básico', descricao: 'Seletores e propriedades', duracao: '25 min', concluido: true },
-          { id: 3, nome: 'Flexbox', descricao: 'Layout moderno', duracao: '25 min', concluido: true },
-          { id: 4, nome: 'Grid CSS', descricao: 'Layouts avançados', duracao: '30 min', concluido: true }
-        ]
+        id: 3,
+        nome: 'HTML',
+        descricao: 'Linguagem de marcação para estruturar páginas web',
+        progresso: 0,
+        topicos: []
       },
       {
-        id: 2,
-        nome: 'JavaScript Essencial',
-        descricao: 'JavaScript puro e boas práticas',
-        progresso: 85,
-        topicos: [
-          { id: 1, nome: 'Variáveis e Tipos', descricao: 'var, let, const', duracao: '20 min', concluido: true },
-          { id: 2, nome: 'Funções', descricao: 'Declaração e expressão', duracao: '20 min', concluido: true },
-          { id: 3, nome: 'DOM API', descricao: 'Manipulação de elementos', duracao: '25 min', concluido: true },
-          { id: 4, nome: 'Async/Await', descricao: 'Operações assíncronas', duracao: '25 min', concluido: false }
-        ]
+        id: 4,
+        nome: 'CSS',
+        descricao: 'Estilização e layout de páginas web',
+        progresso: 0,
+        topicos: []
+      },
+      {
+        id: 14,
+        nome: 'JavaScript',
+        descricao: 'Linguagem do navegador',
+        progresso: 0,
+        topicos: []
       }
     ],
     backend: [

@@ -166,8 +166,9 @@ public class CodexDbContext : DbContext
         {
             new Disciplina { Id = 1, AreaId = 1, Nome = "Lógica de Programação", Descricao = "Princípios fundamentais", Ordem = 1, Ativo = true },
             new Disciplina { Id = 2, AreaId = 1, Nome = "Estruturas de Dados", Descricao = "Arrays, Listas, Pilhas", Ordem = 2, Ativo = true },
-            new Disciplina { Id = 3, AreaId = 2, Nome = "HTML & CSS", Descricao = "Markup e estilos", Ordem = 1, Ativo = true },
-            new Disciplina { Id = 4, AreaId = 2, Nome = "JavaScript", Descricao = "Linguagem do navegador", Ordem = 2, Ativo = true },
+            new Disciplina { Id = 3, AreaId = 2, Nome = "HTML", Descricao = "Linguagem de marcação para estruturar páginas web", Ordem = 1, Ativo = true },
+            new Disciplina { Id = 4, AreaId = 2, Nome = "CSS", Descricao = "Estilização e layout de páginas web", Ordem = 2, Ativo = true },
+            new Disciplina { Id = 14, AreaId = 2, Nome = "JavaScript", Descricao = "Linguagem do navegador", Ordem = 3, Ativo = true },
             new Disciplina { Id = 5, AreaId = 3, Nome = "C#", Descricao = "Linguagem de programação C#", Ordem = 1, Ativo = true },
             new Disciplina { Id = 6, AreaId = 3, Nome = ".NET", Descricao = "Framework .NET para aplicações web e desktop", Ordem = 2, Ativo = true },
             new Disciplina { Id = 7, AreaId = 3, Nome = "JavaScript", Descricao = "JavaScript no backend com Node.js", Ordem = 3, Ativo = true },
@@ -189,7 +190,7 @@ public class CodexDbContext : DbContext
             new Topico { Id = 4, DisciplinaId = 1, Titulo = "Laços de Repetição", Conteudo = "For, while, do-while...", Ordem = 4, Dificuldade = 2, Ativo = true },
             new Topico { Id = 5, DisciplinaId = 2, Titulo = "Arrays", Conteudo = "Trabalho com arrays...", Ordem = 1, Dificuldade = 2, Ativo = true },
             new Topico { Id = 6, DisciplinaId = 3, Titulo = "Introdução ao HTML", Conteudo = "Tags, atributos, semântica...", Ordem = 1, Dificuldade = 1, Ativo = true },
-            new Topico { Id = 7, DisciplinaId = 4, Titulo = "Primeiros Passos com JavaScript", Conteudo = "Variáveis, funções básicas...", Ordem = 1, Dificuldade = 1, Ativo = true }
+            new Topico { Id = 7, DisciplinaId = 14, Titulo = "Primeiros Passos com JavaScript", Conteudo = "Variáveis, funções básicas...", Ordem = 1, Dificuldade = 1, Ativo = true }
         };
         modelBuilder.Entity<Topico>().HasData(topicos);
     }
