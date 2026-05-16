@@ -268,11 +268,28 @@ export class ProfileEditComponent implements OnInit {
       this.http.put('/api/auth/perfil', {
         nome: this.profileData.name,
         sobrenome: this.profileData.surname,
-        avatar: updatedUser.avatar
+        avatar: updatedUser.avatar,
+        cpf: this.profileData.cpf,
+        dataNascimento: this.profileData.dataNascimento,
+        genero: this.profileData.genero,
+        cep: this.profileData.cep,
+        rua: this.profileData.rua,
+        numero: this.profileData.numero,
+        complemento: this.profileData.complemento,
+        bairro: this.profileData.bairro,
+        cidade: this.profileData.cidade,
+        estado: this.profileData.estado
       }, {
         headers: { 'Authorization': `Bearer ${token}` }
       }).subscribe({
-        next: () => {
+        next: (response: any) => {
+          // Update local user with server response (has immutability rules applied)
+          if (response?.dados) {
+            const d = response.dados;
+            updatedUser.cpf = d.cpf || updatedUser.cpf;
+            updatedUser.dataNascimento = d.dataNascimento || updatedUser.dataNascimento;
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+          }
           this.toaster.success('Perfil atualizado com sucesso!');
         },
         error: () => {

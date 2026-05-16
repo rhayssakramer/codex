@@ -151,7 +151,17 @@ public class AuthService : IAuthService
                 Avatar = usuario.Avatar,
                 Ativo = usuario.Ativo,
                 DataCriacao = usuario.DataCriacao,
-                Papel = usuario.Papel ?? "usuario"
+                Papel = usuario.Papel ?? "usuario",
+                Cpf = usuario.Cpf,
+                DataNascimento = usuario.DataNascimento?.ToString("yyyy-MM-dd"),
+                Genero = usuario.Genero,
+                Cep = usuario.Cep,
+                Rua = usuario.Rua,
+                Numero = usuario.Numero,
+                Complemento = usuario.Complemento,
+                Bairro = usuario.Bairro,
+                Cidade = usuario.Cidade,
+                Estado = usuario.Estado
             };
         }
         catch (Exception ex)
@@ -199,6 +209,34 @@ public class AuthService : IAuthService
             if (request.Avatar != null)
                 usuario.Avatar = request.Avatar;
 
+            // CPF e DataNascimento: só pode setar uma vez (imutável depois)
+            if (!string.IsNullOrWhiteSpace(request.Cpf) && string.IsNullOrWhiteSpace(usuario.Cpf))
+                usuario.Cpf = request.Cpf;
+            if (!string.IsNullOrWhiteSpace(request.DataNascimento) && usuario.DataNascimento == null)
+            {
+                if (DateTime.TryParse(request.DataNascimento, out var dt))
+                    usuario.DataNascimento = dt;
+            }
+
+            // Genero e endereço: sempre editáveis
+            if (request.Genero != null)
+                usuario.Genero = request.Genero;
+            if (request.Cep != null)
+                usuario.Cep = request.Cep;
+            if (request.Rua != null)
+                usuario.Rua = request.Rua;
+            if (request.Numero != null)
+                usuario.Numero = request.Numero;
+            if (request.Complemento != null)
+                usuario.Complemento = request.Complemento;
+            if (request.Bairro != null)
+                usuario.Bairro = request.Bairro;
+            if (request.Cidade != null)
+                usuario.Cidade = request.Cidade;
+            if (request.Estado != null)
+                usuario.Estado = request.Estado;
+
+            usuario.DataAtualizacao = DateTime.UtcNow;
             _usuarioRepository.Update(usuario);
             await _usuarioRepository.SaveAsync();
 
@@ -211,7 +249,17 @@ public class AuthService : IAuthService
                 Avatar = usuario.Avatar,
                 Ativo = usuario.Ativo,
                 DataCriacao = usuario.DataCriacao,
-                Papel = usuario.Papel ?? "usuario"
+                Papel = usuario.Papel ?? "usuario",
+                Cpf = usuario.Cpf,
+                DataNascimento = usuario.DataNascimento?.ToString("yyyy-MM-dd"),
+                Genero = usuario.Genero,
+                Cep = usuario.Cep,
+                Rua = usuario.Rua,
+                Numero = usuario.Numero,
+                Complemento = usuario.Complemento,
+                Bairro = usuario.Bairro,
+                Cidade = usuario.Cidade,
+                Estado = usuario.Estado
             };
         }
         catch (Exception ex)

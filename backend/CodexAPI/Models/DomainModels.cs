@@ -13,6 +13,20 @@ public class Usuario
     public DateTime DataAtualizacao { get; set; } = DateTime.UtcNow;
     public string? Papel { get; set; } = "usuario"; // usuario, admin
 
+    // Dados pessoais
+    public string? Cpf { get; set; }
+    public DateTime? DataNascimento { get; set; }
+    public string? Genero { get; set; }
+
+    // Endereço
+    public string? Cep { get; set; }
+    public string? Rua { get; set; }
+    public string? Numero { get; set; }
+    public string? Complemento { get; set; }
+    public string? Bairro { get; set; }
+    public string? Cidade { get; set; }
+    public string? Estado { get; set; }
+
     // Navegação
     public ICollection<ProgressoTopico>? ProgressosTopicos { get; set; }
 }

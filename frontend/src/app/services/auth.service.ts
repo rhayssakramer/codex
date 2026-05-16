@@ -59,6 +59,9 @@ export class AuthService {
           this.userSubject.next(user);
           this.isAuthenticatedSubject.next(true);
 
+          // Load full profile from /api/auth/me to get all fields
+          this.loadFullProfile(data.token);
+
           return user;
         }
         throw new Error(response.mensagem || 'Erro ao fazer login');
@@ -68,6 +71,39 @@ export class AuthService {
         throw new Error(msg);
       })
     );
+  }
+
+  private loadFullProfile(token: string): void {
+    this.http.get<any>('/api/auth/me', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    }).subscribe({
+      next: (response) => {
+        if (response.sucesso && response.dados) {
+          const d = response.dados;
+          const user: any = {
+            id: d.id,
+            email: d.email,
+            name: d.nome,
+            surname: d.sobrenome,
+            avatar: d.avatar,
+            role: d.papel,
+            cpf: d.cpf || '',
+            dataNascimento: d.dataNascimento || '',
+            genero: d.genero || '',
+            cep: d.cep || '',
+            rua: d.rua || '',
+            numero: d.numero || '',
+            complemento: d.complemento || '',
+            bairro: d.bairro || '',
+            cidade: d.cidade || '',
+            estado: d.estado || ''
+          };
+          localStorage.setItem('user', JSON.stringify(user));
+          this.userSubject.next(user);
+        }
+      },
+      error: () => {}
+    });
   }
 
   register(email: string, password: string, nome?: string, sobrenome?: string): Observable<any> {
@@ -152,7 +188,17 @@ export class AuthService {
       this.http.put<any>('/api/auth/perfil', {
         nome: profileData.name || profileData.nome,
         sobrenome: profileData.surname || profileData.sobrenome,
-        avatar: profileData.avatar
+        avatar: profileData.avatar,
+        cpf: profileData.cpf,
+        dataNascimento: profileData.dataNascimento,
+        genero: profileData.genero,
+        cep: profileData.cep,
+        rua: profileData.rua,
+        numero: profileData.numero,
+        complemento: profileData.complemento,
+        bairro: profileData.bairro,
+        cidade: profileData.cidade,
+        estado: profileData.estado
       }, {
         headers: { 'Authorization': `Bearer ${token}` }
       }).subscribe({
