@@ -5,48 +5,55 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace CodexAPI.Migrations
 {
     [DbContext(typeof(CodexDbContext))]
-    [Migration("20260516205231_InitialCreate")]
+    [Migration("20260516211401_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("CodexAPI.Models.Area", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Ativo")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Icone")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int>("Ordem")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.HasKey("Id");
@@ -58,7 +65,7 @@ namespace CodexAPI.Migrations
                         {
                             Id = 1,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(3248),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(7951),
                             Descricao = "Conceitos básicos de programação",
                             Nome = "Fundamentos",
                             Ordem = 1
@@ -67,7 +74,7 @@ namespace CodexAPI.Migrations
                         {
                             Id = 2,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(3926),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(8704),
                             Descricao = "Desenvolvimento web frontend",
                             Nome = "Frontend",
                             Ordem = 2
@@ -76,7 +83,7 @@ namespace CodexAPI.Migrations
                         {
                             Id = 3,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(3929),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(8707),
                             Descricao = "Desenvolvimento web backend",
                             Nome = "Backend",
                             Ordem = 3
@@ -85,7 +92,7 @@ namespace CodexAPI.Migrations
                         {
                             Id = 4,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(3930),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(8709),
                             Descricao = "DevOps e infraestrutura",
                             Nome = "DevOps",
                             Ordem = 4
@@ -94,7 +101,7 @@ namespace CodexAPI.Migrations
                         {
                             Id = 5,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(3931),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(8710),
                             Descricao = "Preparação para certificações",
                             Nome = "Certificações",
                             Ordem = 5
@@ -105,31 +112,33 @@ namespace CodexAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Acao")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("Data")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Detalhes")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Entidade")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("IpAddress")
                         .IsRequired()
                         .HasMaxLength(45)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(45)");
 
                     b.Property<int?>("UsuarioId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -142,32 +151,34 @@ namespace CodexAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AreaId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.Property<bool>("Ativo")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Imagem")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int>("Ordem")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.HasKey("Id");
@@ -182,7 +193,7 @@ namespace CodexAPI.Migrations
                             Id = 1,
                             AreaId = 1,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(4579),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(9500),
                             Descricao = "Princípios fundamentais",
                             Nome = "Lógica de Programação",
                             Ordem = 1
@@ -192,7 +203,7 @@ namespace CodexAPI.Migrations
                             Id = 2,
                             AreaId = 1,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(5202),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(284),
                             Descricao = "Arrays, Listas, Pilhas",
                             Nome = "Estruturas de Dados",
                             Ordem = 2
@@ -202,7 +213,7 @@ namespace CodexAPI.Migrations
                             Id = 3,
                             AreaId = 2,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(5205),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(288),
                             Descricao = "Markup e estilos",
                             Nome = "HTML & CSS",
                             Ordem = 1
@@ -212,7 +223,7 @@ namespace CodexAPI.Migrations
                             Id = 4,
                             AreaId = 2,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(5207),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(290),
                             Descricao = "Linguagem do navegador",
                             Nome = "JavaScript",
                             Ordem = 2
@@ -222,7 +233,7 @@ namespace CodexAPI.Migrations
                             Id = 5,
                             AreaId = 3,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(5209),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(292),
                             Descricao = "Linguagem de programação C#",
                             Nome = "C#",
                             Ordem = 1
@@ -232,7 +243,7 @@ namespace CodexAPI.Migrations
                             Id = 6,
                             AreaId = 3,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(5212),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(295),
                             Descricao = "Framework .NET para aplicações web e desktop",
                             Nome = ".NET",
                             Ordem = 2
@@ -242,7 +253,7 @@ namespace CodexAPI.Migrations
                             Id = 7,
                             AreaId = 3,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(5214),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(297),
                             Descricao = "JavaScript no backend com Node.js",
                             Nome = "JavaScript",
                             Ordem = 3
@@ -252,7 +263,7 @@ namespace CodexAPI.Migrations
                             Id = 8,
                             AreaId = 5,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(5216),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(299),
                             Descricao = "Certificação fundamentals Microsoft Azure",
                             Nome = "AZ-900",
                             Ordem = 1
@@ -262,7 +273,7 @@ namespace CodexAPI.Migrations
                             Id = 9,
                             AreaId = 5,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(5217),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(300),
                             Descricao = "Certificação AI fundamentals Microsoft Azure",
                             Nome = "AI-900",
                             Ordem = 2
@@ -272,7 +283,7 @@ namespace CodexAPI.Migrations
                             Id = 10,
                             AreaId = 5,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(5220),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(303),
                             Descricao = "Certificação GitHub fundamentals",
                             Nome = "GH-900",
                             Ordem = 3
@@ -282,7 +293,7 @@ namespace CodexAPI.Migrations
                             Id = 11,
                             AreaId = 5,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(5222),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(304),
                             Descricao = "Certificação GitHub advanced",
                             Nome = "GH-300",
                             Ordem = 4
@@ -292,7 +303,7 @@ namespace CodexAPI.Migrations
                             Id = 12,
                             AreaId = 4,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(5223),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(306),
                             Descricao = "Sistema de controle de versão distribuído",
                             Nome = "Git",
                             Ordem = 1
@@ -302,7 +313,7 @@ namespace CodexAPI.Migrations
                             Id = 13,
                             AreaId = 4,
                             Ativo = true,
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(5225),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(307),
                             Descricao = "Plataforma de colaboração e hospedagem de repositórios",
                             Nome = "GitHub",
                             Ordem = 2
@@ -313,30 +324,32 @@ namespace CodexAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Concluido")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("DataAtualizacao")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("DataConclusao")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("DataInicio")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("Progresso")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<int>("TopicoId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.Property<int>("UsuarioId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -352,41 +365,43 @@ namespace CodexAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Ativo")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("CodigoExemplo")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Conteudo")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Dificuldade")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("integer")
                         .HasDefaultValue(1);
 
                     b.Property<int>("DisciplinaId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Ordem")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<string>("Titulo")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("VideoUrl")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -400,7 +415,7 @@ namespace CodexAPI.Migrations
                             Id = 1,
                             Ativo = true,
                             Conteudo = "Aprenda sobre variáveis...",
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(5781),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(988),
                             Dificuldade = 1,
                             DisciplinaId = 1,
                             Ordem = 1,
@@ -411,7 +426,7 @@ namespace CodexAPI.Migrations
                             Id = 2,
                             Ativo = true,
                             Conteudo = "Operadores aritméticos, lógicos...",
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(6495),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1916),
                             Dificuldade = 1,
                             DisciplinaId = 1,
                             Ordem = 2,
@@ -422,7 +437,7 @@ namespace CodexAPI.Migrations
                             Id = 3,
                             Ativo = true,
                             Conteudo = "If, else, switch...",
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(6498),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1919),
                             Dificuldade = 2,
                             DisciplinaId = 1,
                             Ordem = 3,
@@ -433,7 +448,7 @@ namespace CodexAPI.Migrations
                             Id = 4,
                             Ativo = true,
                             Conteudo = "For, while, do-while...",
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(6500),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1922),
                             Dificuldade = 2,
                             DisciplinaId = 1,
                             Ordem = 4,
@@ -444,7 +459,7 @@ namespace CodexAPI.Migrations
                             Id = 5,
                             Ativo = true,
                             Conteudo = "Trabalho com arrays...",
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(6501),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1924),
                             Dificuldade = 2,
                             DisciplinaId = 2,
                             Ordem = 1,
@@ -455,7 +470,7 @@ namespace CodexAPI.Migrations
                             Id = 6,
                             Ativo = true,
                             Conteudo = "Tags, atributos, semântica...",
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(6504),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1927),
                             Dificuldade = 1,
                             DisciplinaId = 3,
                             Ordem = 1,
@@ -466,7 +481,7 @@ namespace CodexAPI.Migrations
                             Id = 7,
                             Ativo = true,
                             Conteudo = "Variáveis, funções básicas...",
-                            DataCriacao = new DateTime(2026, 5, 16, 20, 52, 31, 116, DateTimeKind.Utc).AddTicks(6505),
+                            DataCriacao = new DateTime(2026, 5, 16, 21, 14, 0, 643, DateTimeKind.Utc).AddTicks(1928),
                             Dificuldade = 1,
                             DisciplinaId = 4,
                             Ordem = 1,
@@ -478,74 +493,76 @@ namespace CodexAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Ativo")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Avatar")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Bairro")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Cep")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Cidade")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Complemento")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Cpf")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("DataAtualizacao")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("DataNascimento")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Estado")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Genero")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Numero")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Papel")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
-                        .HasColumnType("TEXT")
+                        .HasColumnType("character varying(50)")
                         .HasDefaultValue("usuario");
 
                     b.Property<string>("Rua")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("SenhaHash")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Sobrenome")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -560,7 +577,7 @@ namespace CodexAPI.Migrations
                             Id = 1,
                             Ativo = true,
                             Avatar = "https://i.pravatar.cc/150?img=1",
-                            DataAtualizacao = new DateTime(2026, 5, 16, 20, 52, 31, 115, DateTimeKind.Utc).AddTicks(6322),
+                            DataAtualizacao = new DateTime(2026, 5, 16, 21, 14, 0, 642, DateTimeKind.Utc).AddTicks(870),
                             DataCriacao = new DateTime(2026, 5, 13, 16, 22, 57, 366, DateTimeKind.Utc),
                             Email = "admin@codex.com.br",
                             Nome = "Admin",
