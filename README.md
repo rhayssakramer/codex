@@ -564,7 +564,7 @@ vercel
 
  <p><strong>Organize, compartilhe e evolua seu conhecimento técnico.</strong></p>  
  
-_Nota: Este projeto é apenas para fins educacionais e não possui nenhuma afiliação oficial com a franquia DIO ou suas empresas associadas._
+_Nota: Este projeto é apenas para fins educacionais e não possui nenhuma afiliação oficial._
 
 ## 👩🏼‍💻 Autora:
 <table style="border=0">
