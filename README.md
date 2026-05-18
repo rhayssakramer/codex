@@ -562,35 +562,21 @@ vercel
 
 ## 👥 Créditos
 
-### Equipe CODEX
+ <p><strong>Organize, compartilhe e evolua seu conhecimento técnico.</strong></p>  
+*Nota: Este projeto é apenas para fins educacionais e não possui nenhuma afiliação oficial com a franquia DIO ou suas empresas associadas.*
 
-<table>
+## 👩🏼‍💻 Autora:
+<table style="border=0">
   <tr>
-    <td align="center">
-      <a href="https://github.com/seu-usuario">
-        <img src="https://github.com/seu-usuario.png" width="80px" alt="Seu Nome"/>
-        <br />
-        <sub><b>Seu Nome</b></sub>
+    <td align="left">
+      <a href="https://github.com/rhayssakramer">
+        <span><b>Rhayssa Kramer</b></span>
       </a>
-      <br />
-      <small>Tech Lead & Full Stack Developer</small>
-    </td>
-    <td align="center">
-      <a href="https://github.com/outro-usuario">
-        <img src="https://github.com/outro-usuario.png" width="80px" alt="Outro Nome"/>
-        <br />
-        <sub><b>Outro Nome</b></sub>
-      </a>
-      <br />
-      <small>Developer</small>
+      <br>
+      <span>Sr. Assoc, Full-Stack Development</span>
     </td>
   </tr>
 </table>
+<div align="center"><p>© 2026 CODEX. Todos os direitos reservados.</p></div>
 
----
-
-<div align="center">
-  <p>Feito com 💜 pela equipe CODEX</p>
-  <p><strong>Organize, compartilhe e evolua seu conhecimento técnico.</strong></p>
-  <sub>© 2026 CODEX. Todos os direitos reservados.</sub>
-</div>
+<div align="center"><a href="https://github.com/rhayssakramer"><img src="https://github.com/rhayssakramer/rhayssakramer/blob/main/img/rodape.png"></a></div>
