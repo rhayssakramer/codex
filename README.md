@@ -563,7 +563,8 @@ vercel
 ## 👥 Créditos
 
  <p><strong>Organize, compartilhe e evolua seu conhecimento técnico.</strong></p>  
-*Nota: Este projeto é apenas para fins educacionais e não possui nenhuma afiliação oficial com a franquia DIO ou suas empresas associadas.*
+ 
+_Nota: Este projeto é apenas para fins educacionais e não possui nenhuma afiliação oficial com a franquia DIO ou suas empresas associadas._
 
 ## 👩🏼‍💻 Autora:
 <table style="border=0">
